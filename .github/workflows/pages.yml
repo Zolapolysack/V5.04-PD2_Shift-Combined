@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ never-run-this-branch ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -32,6 +32,7 @@ jobs:
           if [ -f 404.html ]; then cp -v 404.html _site/; fi
           # Static assets and modules (handle spaces & non-ASCII names)
           [ -d "assets" ] && cp -vr "assets" "_site/assets"
+          [ -d "login V2.0" ] && cp -vr "login V2.0" "_site/login V2.0"
           [ -d "link google sheet" ] && cp -vr "link google sheet" "_site/link google sheet"
           [ -d "ปรับ script PD2_Shift-A_V4.0" ] && cp -vr "ปรับ script PD2_Shift-A_V4.0" "_site/ปรับ script PD2_Shift-A_V4.0"
           [ -d "ปรับ script PD2_Shift-B_V4.0" ] && cp -vr "ปรับ script PD2_Shift-B_V4.0" "_site/ปรับ script PD2_Shift-B_V4.0"
