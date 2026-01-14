@@ -21,31 +21,54 @@
   function isAuthed(){ return !!getSession(); }
 
   function createOverlay(loginPath){
+    // Detect mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
     // Styles scoped via unique ids/classes to avoid collisions
     const overlay = document.createElement('div');
     overlay.id = 'pd2-auth-overlay';
     overlay.setAttribute('role','dialog');
     overlay.setAttribute('aria-modal','true');
     overlay.setAttribute('aria-label','Authentication Required');
-    overlay.style.cssText = [
+    
+    // Mobile-specific: simpler background (no backdrop-filter which may not work on all mobile browsers)
+    const overlayStyles = isMobile ? [
+      'position:fixed','top:0','left:0','right:0','bottom:0','z-index:2147483000',
+      'display:flex','align-items:center','justify-content:center',
+      'background:rgba(2,6,23,0.95)','-webkit-overflow-scrolling:touch','overflow:auto'
+    ] : [
       'position:fixed','inset:0','z-index:2147483000','display:flex',
       'align-items:center','justify-content:center','background:rgba(2,6,23,0.72)',
       'backdrop-filter:blur(6px)','-webkit-backdrop-filter:blur(6px)'
-    ].join(';');
+    ];
+    overlay.style.cssText = overlayStyles.join(';');
 
     const card = document.createElement('div');
     card.id = 'pd2-auth-card';
-    card.style.cssText = [
+    
+    // Mobile-specific: full-screen card for better usability
+    const cardStyles = isMobile ? [
+      'width:100%','height:100%','max-height:100vh','overflow:auto',
+      'background:#0b1220','-webkit-overflow-scrolling:touch'
+    ] : [
       'width:min(960px, 96vw)','height:min(620px, 92vh)','border-radius:16px',
       'overflow:hidden','box-shadow:0 20px 60px rgba(0,0,0,0.35)','background:#0b1220',
       'border:1px solid rgba(255,255,255,0.14)'
-    ].join(';');
+    ];
+    card.style.cssText = cardStyles.join(';');
 
     const frame = document.createElement('iframe');
     frame.id = 'pd2-auth-frame';
     frame.title = 'PD2 Login';
     frame.allow = 'clipboard-read; clipboard-write';
-    frame.style.cssText = 'width:100%;height:100%;border:0;display:block;background:#0b1220';
+    frame.scrolling = 'yes'; // Enable scrolling for mobile
+    
+    // Mobile-specific: ensure iframe is fully responsive
+    const frameStyles = isMobile 
+      ? 'width:100%;height:100%;min-height:100vh;border:0;display:block;background:#0b1220;-webkit-overflow-scrolling:touch'
+      : 'width:100%;height:100%;border:0;display:block;background:#0b1220';
+    frame.style.cssText = frameStyles;
+    
     // Encode path fragments (handles spaces in folder names)
     try {
       const [p, q] = String(loginPath).split('?');
@@ -53,6 +76,14 @@
       frame.src = encoded + (q ? ('?' + q) : '') + (q ? '&' : '?') + 'v=' + encodeURIComponent(String(now()));
     } catch(_) {
       frame.src = loginPath + (loginPath.indexOf('?') > -1 ? '&' : '?') + 'v=' + encodeURIComponent(String(now()));
+    }
+    
+    // Mobile-specific: prevent body scroll when overlay is open
+    if (isMobile) {
+      try {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      } catch(_){}
     }
 
     // Header (minimal) for branding and safe-exit on failure
@@ -104,6 +135,11 @@
   try { overlay.remove(); } catch(_){}
   // Restore background interactivity
   try { root.removeAttribute('inert'); root.removeAttribute('aria-hidden'); } catch(_){}
+        // Restore body scroll (mobile fix)
+        try {
+          document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
+        } catch(_){}
         if (ok && typeof options.onUnlock === 'function') {
           try { options.onUnlock(getSession()); } catch(_){}
         }

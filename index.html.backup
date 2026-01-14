@@ -19,241 +19,92 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" />
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
   <!-- Load shared PD2 notification module once at the parent level -->
-  <script src="./pd2-notify.js"></script>
-  <!-- Auth module (required by login form) -->
-  <script src="./login V2.0/forms/neumorphism/auth.js"></script>
+  <script src="./pd2-notify.js" defer></script>
   <!-- Lightweight auth bridge (overlay login gate) -->
-  <script src="./assets/js/pd2-auth-bridge.js"></script>
+  <script src="./assets/js/pd2-auth-bridge.js" defer></script>
   <!-- PWA: manifest + icons -->
   <link rel="manifest" href="./manifest.json">
   <!-- Use root images.png as a single source icon; browsers will scale as needed. Replace with proper sizes if available. -->
   <link rel="icon" href="./images.png" sizes="192x192" />
   <link rel="apple-touch-icon" href="./images.png" />
   <style>
-    :root { 
-      --pd2-green:#16a34a; --pd2-green-accent:#22c55e; 
-      --pd2-red:#f43f5e; --pd2-blue:#24a8ea; --pd2-purple:#6d28d9; 
-      --pd2-spacing-xs: clamp(0.5rem, 1vw, 0.75rem);
-      --pd2-spacing-sm: clamp(0.75rem, 1.5vw, 1rem);
-      --pd2-spacing-md: clamp(1rem, 2vw, 1.5rem);
-      --pd2-spacing-lg: clamp(1.5rem, 3vw, 2rem);
-      --pd2-spacing-xl: clamp(2rem, 4vw, 3rem);
-    }
+    :root { --pd2-green:#16a34a; --pd2-green-accent:#22c55e; --pd2-red:#f43f5e; --pd2-blue:#24a8ea; --pd2-purple:#6d28d9; }
     * { font-family: 'Kanit', sans-serif; }
-    body { 
-      background: linear-gradient(135deg, #0a0a0a 50%, #0ea5e9 100%); 
-      min-height: 100vh; 
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    .glass { 
-      background: rgba(255,255,255,0.1); 
-      -webkit-backdrop-filter: blur(12px); 
-      backdrop-filter: blur(12px); 
-      border: 1px solid rgba(255,255,255,0.2); 
-    }
-    .tab-btn { transition: all .2s cubic-bezier(0.4, 0, 0.2, 1); }
+    body { background: linear-gradient(135deg, #0a0a0a 50%, #0ea5e9 100%); min-height: 100vh; }
+    .glass { background: rgba(255,255,255,0.1); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+    .tab-btn { transition: all .2s ease; }
     .tab-btn.active { background: linear-gradient(135deg, var(--pd2-green-accent), var(--pd2-green)); color: #fff; border-color:var(--pd2-green); }
     .tab-btn:not(.active) { background: rgba(255,255,255,0.9); color:#111827; border-color:#e5e7eb; }
-    .frame-wrap { height: calc(100vh - 112px); /* header(32)+box(80)≈112 */ }
-    @media (max-width: 768px) { .frame-wrap { height: calc(100vh - 140px); } }
-    .hero-blur { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    
+    /* SPA Module Container Styles */
+    .module-container { display: none; min-height: 100vh; width: 100%; overflow-y: auto; overflow-x: hidden; }
+    .module-container.active { display: block; }
+    
+    /* Mobile-First: Fullscreen Module Mode */
+    @media (max-width: 768px) {
+      body.module-active { overflow: hidden; position: fixed; width: 100%; height: 100vh; }
+      body.module-active header, 
+      body.module-active #hero,
+      body.module-active #overview,
+      body.module-active footer { display: none !important; }
+      body.module-active #shift { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        z-index: 100;
+        margin: 4px;
+        background: rgba(10,10,10,0.95);
+        backdrop-filter: blur(20px);
+        padding: 8px;
+        border-radius: 12px;
+      }
+      body.module-active #workbench { 
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+      body.module-active .module-container { 
+        min-height: calc(100vh - 70px);
+        height: auto;
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+      }
+    }
+    
+    /* Desktop: Keep normal layout */
+    @media (min-width: 769px) {
+      .module-container { min-height: 600px; }
+    }
+    .hero-blur { -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
     /* Loading overlay for iframe navigation */
     .loading-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.85); z-index:40; }
     .loading-hidden { display:none; }
     .pill-btn[disabled] { opacity:.55; cursor:not-allowed; }
-    
-    /* Professional gradient text with better rendering */
-    .gradient-text { 
-      font-weight: 700; 
-      background: linear-gradient(90deg,#ffffff 0%,#f3f4f6 35%,#e5e7eb 65%,#d1d5db 100%); 
-      -webkit-background-clip: text; 
-      background-clip: text; 
-      color: transparent; 
-      -webkit-text-stroke: 0; 
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-      filter: none; 
-      letter-spacing: -0.02em; 
-      -webkit-font-smoothing: antialiased; 
-      -moz-osx-font-smoothing: grayscale;
-      line-height: 1.2;
-    }
-    
+    /* Pro look helpers */
+    .gradient-text { font-weight: 700; background: linear-gradient(90deg,#ffffff 0%,#f3f4f6 35%,#e5e7eb 65%,#cbd5d1 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 0; text-shadow: 0 1px 0 rgba(0,0,0,0.10); filter: none; letter-spacing: 0.2px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     .sticky-card { position: sticky; top: 1rem; z-index: 50; }
-    
-    /* Enhanced pill group with better spacing */
-    .pill-group { 
-      background: rgba(255,255,255,0.88); 
-      border: 1px solid rgba(255,255,255,0.7); 
-      padding: 0.375rem; 
-      border-radius: 1rem; 
-      display: inline-flex; 
-      gap: 0.375rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    
-    .pill-btn { 
-      position: relative; 
-      padding: 0.875rem 1.5rem; 
-      border-radius: 0.875rem; 
-      font-weight: 600; 
-      color:#0f172a; 
-      transition: transform .25s cubic-bezier(0.4, 0, 0.2, 1), 
-                  box-shadow .25s cubic-bezier(0.4, 0, 0.2, 1), 
-                  background-color .25s cubic-bezier(0.4, 0, 0.2, 1); 
-      will-change: transform; 
-      overflow: hidden; 
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-      letter-spacing: 0.01em;
-    }
-    
-    .pill-btn:hover { 
-      transform: translateY(-2px); 
-      box-shadow: 0 8px 24px rgba(0,0,0,.15); 
-    }
-    
-    .pill-btn:active { 
-      transform: translateY(0); 
-      box-shadow: 0 4px 12px rgba(0,0,0,.12); 
-    }
-    
-    .pill-btn:focus-visible { 
-      outline: none; 
-      box-shadow: 0 0 0 3px rgba(255,255,255,.8), 0 8px 24px rgba(0,0,0,.2); 
-    }
-    
-    .pill-btn::after { 
-      content: ""; 
-      position: absolute; 
-      inset: -1px; 
-      background: radial-gradient(140px 70px at var(--x,10%) 50%, rgba(255,255,255,.4), transparent 65%); 
-      opacity: 0; 
-      transition: opacity .3s ease; 
-      pointer-events: none; 
-    }
-    
-    .pill-btn:hover::after { opacity: .65; }
-    
-    .pill-btn.active { 
-      background: linear-gradient(135deg, var(--pd2-green-accent), var(--pd2-green)); 
-      color:#fff; 
-      box-shadow: 0 14px 32px rgba(34,197,94,.32), 0 0 0 1px rgba(255,255,255,.3) inset; 
-    }
-    
-    #btnB.pill-btn.active { 
-      background: linear-gradient(135deg, #ef4444, var(--pd2-red)); 
-      box-shadow: 0 14px 32px rgba(244,63,94,.32), 0 0 0 1px rgba(255,255,255,.3) inset; 
-    }
-    
-    #btnReport.pill-btn.active { 
-      background: linear-gradient(135deg, #4c1d95, var(--pd2-purple)); 
-      box-shadow: 0 14px 32px rgba(109,40,217,.32), 0 0 0 1px rgba(255,255,255,.3) inset; 
-    }
-    
-    /* Professional grid background */
-    .bg-grid { 
-      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.14) 1px, transparent 0); 
-      background-size: 24px 24px; 
-    }
-    
-    /* Enhanced spotlight effect */
-    .spotlight { 
-      position: absolute; 
-      inset: 0; 
-      opacity: .85; 
-      mix-blend-mode: screen; 
-    }
-    
-    .spotlight:before, .spotlight:after { 
-      content: ""; 
-      position: absolute; 
-      border-radius: 9999px; 
-      filter: blur(70px); 
-    }
-    
-    .spotlight:before { 
-      width: 520px; 
-      height: 520px; 
-      left: -130px; 
-      top: -150px; 
-      background: radial-gradient(circle, rgba(34,211,238,.38), transparent 62%); 
-    }
-    
-    .spotlight:after { 
-      width: 580px; 
-      height: 580px; 
-      right: -170px; 
-      bottom: -190px; 
-      background: radial-gradient(circle, rgba(167,139,250,.38), transparent 62%); 
-    }
-    
-    /* Enhanced Mobile-First Shift Selector */
-    .shift-section { 
-      background: linear-gradient(135deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.09) 100%); 
-    }
-    
-    /* Mobile responsive pill buttons */
-    @media (max-width: 640px) {
-      .pill-group { 
-        flex-direction: column; 
-        width: 100%; 
-        max-width: 100%; 
-        gap: 0.875rem; 
-        padding: 0; 
-        background: transparent; 
-        border: none;
-        box-shadow: none;
-      }
-      
-      .pill-btn { 
-        width: 100%; 
-        padding: 1.25rem 1.75rem; 
-        border-radius: 0.875rem; 
-        font-weight: 600; 
-        background: rgba(255,255,255,0.96); 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        min-height: 4.5rem; 
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      }
-      
-      .pill-btn:hover { 
-        transform: translateY(-3px); 
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      }
-    }
-    
-    /* Specific button colors for better distinction */
-    .pill-btn-shift-a { 
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-      color: white; 
-    }
-    
-    .pill-btn-shift-a:hover { 
-      background: linear-gradient(135deg, #059669 0%, #047857 100%); 
-      box-shadow: 0 10px 28px rgba(16,185,129,0.4); 
-    }
-    
-    .pill-btn-shift-b { 
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
-      color: white; 
-    }
-    
-    .pill-btn-shift-b:hover { 
-      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); 
-      box-shadow: 0 10px 28px rgba(239,68,68,0.4); 
-    }
-    
-    .pill-btn-report { 
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); 
-      color: white; 
-    }
-    
-    .pill-btn-report:hover { 
-      background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); 
-      box-shadow: 0 10px 28px rgba(139,92,246,0.4); 
-    }
+    .pill-group { background: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.65); padding: .25rem; border-radius: .875rem; display: inline-flex; gap: .25rem; }
+    .pill-btn { position: relative; padding: .625rem 1.125rem; border-radius: .85rem; font-weight: 400; color:#0f172a; transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease; will-change: transform, box-shadow; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .pill-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+    .pill-btn:active { transform: translateY(0); box-shadow: 0 3px 10px rgba(0,0,0,.1); }
+    .pill-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px rgba(255,255,255,.7), 0 8px 20px rgba(0,0,0,.18); }
+    .pill-btn::after { content: ""; position: absolute; inset: -1px; background: radial-gradient(120px 60px at var(--x,10%) 50%, rgba(255,255,255,.35), transparent 60%); opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+    .pill-btn:hover::after { opacity: .6; }
+    .pill-btn.active { background: linear-gradient(135deg, var(--pd2-green-accent), var(--pd2-green)); color:#fff; box-shadow: 0 14px 30px rgba(34,197,94,.28), 0 0 0 1px rgba(255,255,255,.25) inset; }
+    #btnB.pill-btn.active { background: linear-gradient(135deg, #ef4444, var(--pd2-red)); box-shadow: 0 14px 30px rgba(244,63,94,.28), 0 0 0 1px rgba(255,255,255,.25) inset; }
+    #btnReport.pill-btn.active { background: linear-gradient(135deg, #4c1d95, var(--pd2-purple)); box-shadow: 0 14px 30px rgba(109,40,217,.28), 0 0 0 1px rgba(255,255,255,.25) inset; }
+    .bg-grid { background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.12) 1px, transparent 0); background-size: 22px 22px; }
+    .spotlight { position: absolute; inset: 0; opacity: .8; mix-blend-mode: screen; }
+    .spotlight:before, .spotlight:after { content: ""; position: absolute; border-radius: 9999px; filter: blur(60px); }
+    .spotlight:before { width: 480px; height: 480px; left: -120px; top: -140px; background: radial-gradient(circle, rgba(34,211,238,.35), transparent 60%); }
+    .spotlight:after { width: 540px; height: 540px; right: -160px; bottom: -180px; background: radial-gradient(circle, rgba(167,139,250,.35), transparent 60%); }
   </style>
   <style id="pd2-reduced-motion-global">
     @media (prefers-reduced-motion: reduce) {
@@ -312,7 +163,7 @@
   <!-- Hero Section -->
   <main id="main" role="main">
   <!-- mobile responsive fix: reduce hero min height on very small screens -->
-  <section class="relative overflow-hidden mt-4 mx-4 rounded-2xl min-h-[260px] sm:min-h-[300px] md:min-h-[340px] flex items-center">
+  <section class="relative overflow-hidden mt-4 mx-4 rounded-2xl min-h-[240px] sm:min-h-[280px] md:min-h-[360px] flex items-center">
     <div class="absolute inset-0 -z-10">
       <div class="absolute -top-24 -left-24 w-80 h-80 bg-cyan-400/30 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl"></div>
@@ -320,108 +171,84 @@
     </div>
     <div class="w-full glass rounded-2xl bg-grid relative">
       <div class="spotlight" aria-hidden="true"></div>
-      <div class="px-6 py-10 md:px-12 md:py-14">
-        <div class="max-w-4xl mx-auto text-center">
-          <!-- Balanced hero heading with better spacing -->
-          <h1 class="gradient-text whitespace-normal break-words tracking-tight text-[clamp(1.5rem,5vw,2.8rem)] font-bold leading-[1.2] mb-5">
-            ระบบบันทึกข้อมูลกะ A & B<br class="hidden sm:inline" /><span class="sm:inline"> และรายงาน PD2</span>
-          </h1>
-          <p class="text-white/90 whitespace-normal text-[clamp(1rem,2.5vw,1.125rem)] leading-relaxed max-w-3xl mx-auto">
-            รวมการทำงานของทั้งสองกะสามารถสลับกะได้ บันทึกข้อมูล<br class="hidden sm:inline" /> รองรับการใช้งานทั้งออนไลน์และออฟไลน์
-          </p>
+      <div class="px-6 py-8 md:px-10 md:py-12">
+        <div class="max-w-full text-left">
+          <!-- mobile responsive fix: allow wrapping on small screens to prevent overflow -->
+          <h1 class="gradient-text whitespace-normal sm:whitespace-nowrap break-words tracking-tight text-[clamp(1rem,4vw,2.6rem)] md:text-[clamp(1.75rem,3.2vw,3rem)] font-semibold leading-tight">ระบบบันทึกข้อมูลกะ A & B และรายงาน PD2</h1>
+          <p class="text-white/85 mt-3 whitespace-normal sm:whitespace-nowrap text-[clamp(0.9rem,2.2vw,1.125rem)]">รวมการทำงานของทั้งสองกะสามารถสลับกะได้ บันทึกข้อมูล รองรับการใช้งานทั้งออนไลน์และออฟไลน์</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Overview / Features -->
-  <section id="overview" class="mx-4 mt-10">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
-      <div class="glass rounded-xl p-6 md:p-7 text-center h-full transition-all duration-300 hover:ring-2 hover:ring-cyan-400/50 hover:shadow-2xl group">
-        <div class="text-white text-[clamp(1.1rem,2vw,1.25rem)] font-semibold flex items-center justify-center gap-2.5 mb-3">
+  <section id="overview" class="mx-4 mt-8">
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="glass rounded-xl p-6 text-center h-full">
+        <div class="text-white text-xl font-medium flex items-center justify-center gap-2">
           <!-- Save (Floppy) -->
-          <svg class="w-7 h-7 md:w-8 md:h-8 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 3h9l3 3v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M8 3h5v5H8z" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M8 21v-6h8v6" stroke="currentColor" stroke-width="1.5"/>
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 3h9l3 3v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" stroke="white" stroke-width="1.5"/>
+            <path d="M8 3h5v5H8z" stroke="white" stroke-width="1.5"/>
+            <path d="M8 21v-6h8v6" stroke="white" stroke-width="1.5"/>
           </svg>
           <span>บันทึกอัตโนมัติ</span>
         </div>
-        <p class="text-white/80 text-[clamp(0.9rem,1.8vw,1rem)] leading-relaxed">เซฟข้อมูลอัตโนมัติระหว่างพิมพ์<br class="hidden sm:inline" /> ลดโอกาสข้อมูลสูญหาย</p>
+        <p class="text-white/85 text-base mt-2">เซฟข้อมูลอัตโนมัติระหว่างพิมพ์ ลดโอกาสข้อมูลสูญหาย</p>
       </div>
-      <div class="glass rounded-xl p-6 md:p-7 text-center h-full transition-all duration-300 hover:ring-2 hover:ring-purple-400/50 hover:shadow-2xl group">
-        <div class="text-white text-[clamp(1.1rem,2vw,1.25rem)] font-semibold flex items-center justify-center gap-2.5 mb-3">
+      <div class="glass rounded-xl p-6 text-center h-full">
+        <div class="text-white text-xl font-medium flex items-center justify-center gap-2">
           <!-- Offline (Cloud with slash) -->
-          <svg class="w-7 h-7 md:w-8 md:h-8 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M8 18H7a4 4 0 1 1 0-8c.4-2.9 2.9-5 6-5a6 6 0 0 1 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M3 3l18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 18H7a4 4 0 1 1 0-8c.4-2.9 2.9-5 6-5a6 6 0 0 1 6 6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M3 3l18 18" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
           <span>ใช้งานได้แม้ออฟไลน์</span>
         </div>
-        <p class="text-white/80 text-[clamp(0.9rem,1.8vw,1rem)] leading-relaxed">รองรับการทำงานออฟไลน์<br class="hidden sm:inline" /> และซิงก์เมื่อกลับมาออนไลน์</p>
+        <p class="text-white/85 text-base mt-2">รองรับการทำงานออฟไลน์ และซิงก์เมื่อกลับมาออนไลน์</p>
       </div>
-      <div class="glass rounded-xl p-6 md:p-7 text-center h-full transition-all duration-300 hover:ring-2 hover:ring-blue-400/50 hover:shadow-2xl group">
-        <div class="text-white text-[clamp(1.1rem,2vw,1.25rem)] font-semibold flex items-center justify-center gap-2.5 mb-3">
+      <div class="glass rounded-xl p-6 text-center h-full">
+        <div class="text-white text-xl font-medium flex items-center justify-center gap-2">
           <!-- Recovery (Rotate arrows) -->
-          <svg class="w-7 h-7 md:w-8 md:h-8 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M21 12a9 9 0 1 1-3-6.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M21 3v6h-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-3-6.7" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M21 3v6h-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <span>กู้คืนฉุกเฉิน</span>
         </div>
-        <p class="text-white/80 text-[clamp(0.9rem,1.8vw,1rem)] leading-relaxed">ระบบยืนยันและดำเนินการต่อ<br class="hidden sm:inline" />รายการที่ค้าง</p>
+        <p class="text-white/85 text-base mt-2">ระบบยืนยันและดำเนินการต่อรายการที่ค้าง </p>
       </div>
-      <div class="glass rounded-xl p-6 md:p-7 text-center h-full transition-all duration-300 hover:ring-2 hover:ring-green-400/50 hover:shadow-2xl group">
-        <div class="text-white text-[clamp(1.1rem,2vw,1.25rem)] font-semibold flex items-center justify-center gap-2.5 mb-3">
+      <div class="glass rounded-xl p-6 text-center h-full">
+        <div class="text-white text-xl font-medium flex items-center justify-center gap-2">
           <!-- Secure Sheets (Shield with check) -->
-          <svg class="w-7 h-7 md:w-8 md:h-8 transition-transform group-hover:scale-110" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3l7 3v6c0 5-3.3 9-7 9s-7-4-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M9.5 12.5l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3l7 3v6c0 5-3.3 9-7 9s-7-4-7-9V6l7-3z" stroke="white" stroke-width="1.5"/>
+            <path d="M9.5 12.5l2 2 3-3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <span>ส่งขึ้นชีตอย่างปลอดภัย</span>
         </div>
-        <p class="text-white/80 text-[clamp(0.9rem,1.8vw,1rem)] leading-relaxed">เชื่อมต่อกับ Google Sheets<br class="hidden sm:inline" /> ผ่าน API และจัดเก็บสำรอง</p>
+        <p class="text-white/85 text-base mt-2"> เชื่อมต่อกับ Google Sheets ผ่าน API และจัดเก็บข้อมูลสำรอง</p>
       </div>
     </div>
 
     
   </section>
 
-  <!-- Shift Selector (Mobile-Optimized) -->
-  <section id="shift" class="mx-4 mt-10 mb-10">
-    <div class="glass shift-section rounded-2xl ring-1 ring-white/15 shadow-xl overflow-hidden">
-      <!-- Header Section -->
-      <div class="shift-header text-center py-6 md:py-7">
-        <div class="flex items-center justify-center gap-2.5 mb-2.5">
-          <svg class="w-7 h-7 md:w-8 md:h-8 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          <h2 class="shift-title text-white/90 text-[clamp(1.3rem,2.5vw,1.5rem)] font-semibold">เลือกกะสำหรับใช้งาน</h2>
+  <!-- Shift Selector -->
+  <section id="shift" class="mx-4 mt-6">
+    <div class="glass rounded-2xl p-5 ring-1 ring-white/15">
+      <div class="flex flex-col gap-4">
+        <div class="text-center">
+          <div class="text-white/90 text-xl md:text-2xl font-medium">เลือกกะสำหรับใช้งาน</div>
+          <div class="text-sm md:text-base text-white/70">สามารถสลับได้ ข้อมูลจะยังอยู่ตามกะที่เลือก</div>
         </div>
-        <p class="shift-subtitle text-white/70 text-[clamp(0.95rem,2vw,1.05rem)] mt-1">คลิกเพื่อเข้าสู่ระบบบันทึกข้อมูล</p>
-      </div>
-      
-      <!-- Buttons Section -->
-      <div class="shift-buttons px-4 md:px-6 pb-6 md:pb-8">
-        <!-- Mobile-First: Direct links (no iframe = no double scroll) -->
-        <div class="pill-group w-full md:w-auto md:inline-flex md:max-w-[850px] mx-auto gap-3 md:gap-4">
-          <a href="./ปรับ script PD2_Shift-A_V4.0/index.html" class="pill-btn pill-btn-shift-a text-center no-underline text-[clamp(1rem,2.2vw,1.125rem)] py-4 md:py-5">
-            บันทึกข้อมูลกะ A
-          </a>
-          <a href="./ปรับ script PD2_Shift-B_V4.0/index.html" class="pill-btn pill-btn-shift-b text-center no-underline text-[clamp(1rem,2.2vw,1.125rem)] py-4 md:py-5">
-            บันทึกข้อมูลกะ B
-          </a>
-          <a href="./link google sheet/index.html" class="pill-btn pill-btn-report text-center no-underline text-[clamp(1rem,2.2vw,1.125rem)] py-4 md:py-5">
-            รายงาน
-          </a>
-        </div>
-        
-        <!-- Helper Text -->
-        <div class="mt-5 text-center text-white/65 text-[clamp(0.85rem,1.8vw,0.95rem)] leading-relaxed">
-          <svg class="w-4 h-4 md:w-5 md:h-5 inline-block mr-1.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          ข้อมูลจะถูกบันทึกอัตโนมัติและสามารถเข้าถึงได้ทุกที่
+        <div class="flex justify-center">
+          <!-- mobile responsive fix: allow buttons to wrap on small screens -->
+          <div class="pill-group shadow-md w-full md:w-[720px] lg:w-[800px] flex-wrap sm:flex-nowrap gap-2">
+            <button id="btnA" aria-pressed="true" aria-controls="workbench" class="pill-btn active text-base md:text-lg ring-1 ring-black/0 hover:ring-black/5 flex-1">บันทึกข้อมูลกะ A</button>
+            <button id="btnB" aria-pressed="false" aria-controls="workbench" class="pill-btn text-base md:text-lg ring-1 ring-black/0 hover:ring-black/5 flex-1">บันทึกข้อมูลกะ B</button>
+            <button id="btnReport" aria-pressed="false" aria-controls="workbench" class="pill-btn text-base md:text-lg ring-1 ring-black/0 hover:ring-black/5 flex-1">รายงาน</button>
+          </div>
         </div>
       </div>
     </div>
@@ -429,16 +256,27 @@
 
   
 
-  <!-- Note: Iframe removed - using direct navigation for better mobile UX (no double scroll) -->
+  <!-- Workbench / SPA Modules -->
+  <section id="workbench" class="mx-4 mt-4 mb-6">
+    <!-- Loading overlay -->
+    <div id="moduleLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden">
+      <div class="glass rounded-2xl p-8 flex flex-col items-center gap-4">
+        <div class="h-12 w-12 rounded-full border-4 border-white/30 border-t-cyan-500 animate-spin"></div>
+        <div id="moduleLoadingLabel" class="text-white text-lg font-medium">กำลังโหลดโมดูล...</div>
+      </div>
+    </div>
+    
+    <!-- Module Containers (SPA) -->
+    <div id="moduleA" class="module-container" data-module="A"></div>
+    <div id="moduleB" class="module-container" data-module="B"></div>
+    <div id="moduleReport" class="module-container" data-module="REPORT"></div>
+  </section>
   </main>
   <!-- Footer -->
-  <footer class="mx-4 mb-8 mt-12">
-    <div class="glass rounded-xl p-5 md:p-6 flex flex-col gap-4 text-center">
-      <div class="text-white/75 text-[clamp(0.9rem,2vw,1rem)] leading-relaxed font-medium">รองรับการใช้งานบนอุปกรณ์พกพา และเบราว์เซอร์หลัก</div>
-      <div class="text-white/55 text-[clamp(0.75rem,1.5vw,0.875rem)] pt-3 border-t border-white/10 leading-relaxed">
-        <div class="mb-1.5">© 2026 Production Unit • Unified Production Console v5.04</div>
-        <div class="text-white/45">Mobile-First Edition • Developed & Designed by ZP1048</div>
-      </div>
+  <footer class="mx-4 mb-6 mt-10">
+    <div class="glass rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-sm">
+  <div class="text-white/70">© 2026 Production Unit • Unified Production Console v5.03 Developed & Designed by ZP1048 </div>                                                                    
+      <div class="text-white/60">รองรับการใช้งานบนอุปกรณ์พกพา และเบราว์เซอร์หลัก</div>
     </div>
   </footer>
 
@@ -454,11 +292,128 @@
     
   </div>
 
+  <!-- Load SPA Module Loader -->
+  <script src="./assets/js/spa-loader.js" defer></script>
+  
+  <!-- Additional scripts for auth and utilities -->
   <script>
-    // Simplified navigation - no iframe, direct links only
     (function(){
-      // No button handlers needed - using native <a> navigation
-  let frame = document.getElementById('shiftFrame');
+      const toast = document.getElementById('toast');
+
+      function showToast(message) {
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        toast.classList.add('opacity-100');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => {
+          toast.classList.add('opacity-0', 'pointer-events-none');
+          toast.classList.remove('opacity-100');
+        }, 1800);
+      }
+
+      // Logout handler
+      const logoutBtn = document.getElementById('pd2LogoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          try {
+            if (window.PD2Auth && typeof PD2Auth.logout === 'function') {
+              PD2Auth.logout();
+            }
+          } catch(_){}
+          showToast('ออกจากระบบแล้ว');
+          // Mount login overlay
+          setTimeout(() => {
+            try {
+              if (window.PD2Auth && typeof PD2Auth.mountLoginGate === 'function') {
+                PD2Auth.mountLoginGate({ loginPath: './login V2.0/forms/neumorphism/index.html' });
+              }
+            } catch(_){}
+          }, 100);
+        });
+      }
+
+      // Reset system handler
+      const resetBtn = document.getElementById('pd2ResetBtn');
+      const resetMenu = document.getElementById('pd2ResetMenu');
+      const resetWrap = document.getElementById('pd2ResetWrap');
+      
+      if (resetBtn && resetMenu && resetWrap) {
+        function toggleMenu(force) {
+          const show = force !== undefined ? force : resetMenu.classList.contains('hidden');
+          resetMenu.classList.toggle('hidden', !show);
+        }
+        
+        resetBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleMenu();
+        });
+        
+        document.addEventListener('click', (e) => {
+          if (!resetWrap.contains(e.target)) toggleMenu(false);
+        }, { passive: true, capture: true });
+
+        resetMenu.querySelectorAll('.pd2-reset-item').forEach(item => {
+          item.addEventListener('click', async (e) => {
+            const mode = item.getAttribute('data-mode');
+            toggleMenu(false);
+            
+            const modeLabel = mode === 'partial' ? 'บางส่วน' : 'ทั้งหมด';
+            showToast('รีเซ็ต' + modeLabel + '...');
+            
+            try {
+              // Clear localStorage
+              if (mode === 'full') {
+                const keys = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                  const k = localStorage.key(i);
+                  if (k && /pd2|shift|wage|machine|fabric|employee/i.test(k)) {
+                    keys.push(k);
+                  }
+                }
+                keys.forEach(k => localStorage.removeItem(k));
+              }
+              
+              // Clear caches
+              if (window.caches) {
+                const names = await caches.keys();
+                await Promise.all(names.map(n => caches.delete(n)));
+              }
+              
+              // Unregister service workers
+              if (navigator.serviceWorker) {
+                const regs = await navigator.serviceWorker.getRegistrations();
+                await Promise.all(regs.map(r => r.unregister()));
+              }
+              
+              setTimeout(() => {
+                location.reload(true);
+              }, 500);
+            } catch (err) {
+              console.error('Reset error:', err);
+              showToast('เกิดข้อผิดพลาด กรุณาลองใหม่');
+            }
+          });
+        });
+      }
+
+      // Auth gate initialization
+      try {
+        const mount = () => {
+          try {
+            if (window.PD2Auth && typeof PD2Auth.mountLoginGate === 'function' && !PD2Auth.isAuthed()) {
+              PD2Auth.mountLoginGate({ loginPath: './login V2.0/forms/neumorphism/index.html' });
+            }
+          } catch(_) {}
+        };
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          setTimeout(mount, 0);
+        } else {
+          document.addEventListener('DOMContentLoaded', mount, { once: true, passive: true });
+        }
+      } catch (_) {}
+    })();
+  </script>
   // Hero buttons removed per request
       const toast = document.getElementById('toast');
   // Simple cache-busting token so GH Pages picks up latest subpages
@@ -1440,58 +1395,6 @@
             });
             socket.addEventListener('close', () => console.debug('[dev-ws] disconnected'));
           } catch(_){}
-        })();
-      </script>
-      <!-- Initialize Auth Gate: mount login overlay if not authenticated -->
-      <script>
-        (function(){
-          try {
-            let retryCount = 0;
-            const maxRetries = 50; // Try for up to 5 seconds (50 * 100ms)
-            
-            // Wait for DOMContentLoaded and pd2-auth-bridge.js to be fully loaded
-            function initAuthGate(){
-              retryCount++;
-              
-              // Check if all required scripts are loaded
-              const pd2AuthReady = (typeof window.PD2Auth !== 'undefined' && typeof window.PD2Auth.mountLoginGate === 'function');
-              const formAuthReady = (typeof window.FormAuth !== 'undefined' && typeof window.FormAuth.authenticate === 'function');
-              
-              if (pd2AuthReady && formAuthReady) {
-                console.log('[PD2] Auth scripts loaded successfully');
-                console.log('[PD2] Initializing auth gate...');
-                
-                window.PD2Auth.mountLoginGate({
-                  loginPath: './login V2.0/forms/neumorphism/index.html',
-                  onUnlock: function(session){
-                    console.log('[PD2] Auth unlocked, session:', session);
-                    try {
-                      if (window.PD2Notify) {
-                        const username = (session && session.user) ? session.user : '';
-                        window.PD2Notify('ยินดีต้อนรับ ' + username, 'success');
-                      }
-                    } catch(e){ console.error('[PD2] Notify error:', e); }
-                  }
-                });
-              } else {
-                if (retryCount >= maxRetries) {
-                  console.error('[PD2] Auth scripts failed to load after ' + maxRetries + ' attempts');
-                  console.error('[PD2] PD2Auth ready:', pd2AuthReady, '| FormAuth ready:', formAuthReady);
-                  alert('Authentication system failed to load. Please refresh the page.');
-                  return;
-                }
-                console.warn('[PD2] Waiting for auth scripts... (attempt ' + retryCount + '/' + maxRetries + ')');
-                console.warn('[PD2] PD2Auth ready:', pd2AuthReady, '| FormAuth ready:', formAuthReady);
-                setTimeout(initAuthGate, 100);
-              }
-            }
-            
-            // Initialize after a short delay to ensure scripts are loaded
-            setTimeout(initAuthGate, 200);
-          } catch(err){
-            console.error('[PD2] Auth gate init failed:', err);
-            alert('Authentication initialization error: ' + err.message);
-          }
         })();
       </script>
       <!-- Register service worker to enable installation on supporting browsers -->

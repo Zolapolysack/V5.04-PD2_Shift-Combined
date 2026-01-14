@@ -403,6 +403,16 @@
 </head>
 <!-- mobile responsive fix: add bottom safe-area padding for Android navbar avoidance -->
 <body class="min-h-screen pb-[env(safe-area-inset-bottom,0)]" style="overflow-x:hidden;">
+    <!-- Back to Home Button (Mobile-First Navigation) -->
+    <div class="fixed top-4 left-4 z-50">
+        <a href="../index.html" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-500 to-red-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span class="font-medium">กลับหน้าหลัก</span>
+        </a>
+    </div>
+
     <!-- Header Section -->
     <div class="glass-strong rounded-lg mx-4 mt-4 p-6 mb-6">
         <div class="text-center mb-4">
@@ -490,45 +500,46 @@
     </div>
 
     <!-- Quick Actions Box -->
-    <div class="glass rounded-lg mx-4 my-6 p-6 w-full max-w-full px-2">
-        <div class="flex flex-wrap gap-4 justify-center w-full max-w-full sm:flex-row flex-col">
-            <button onclick="addDataSet()" class="btn-glow btn-green text-white px-6 py-3 rounded-lg font-normal text-base flex items-center w-full sm:w-auto">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+    <div class="glass rounded-lg mx-4 my-6 p-6 w-full max-w-full">
+        <h3 class="text-white text-lg font-semibold mb-4 text-center"></h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full">
+            <button onclick="addDataSet()" class="btn-glow btn-green text-white px-5 py-4 rounded-xl font-medium text-base flex items-center justify-center gap-2 w-full hover:scale-105 transition-transform">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
                 </svg>
-                เพิ่มชุดข้อมูลใหม่
+                <span>เพิ่มชุดข้อมูลใหม่</span>
             </button>
-            <button onclick="copyAndAddDataSet()" class="btn-glow btn-blue text-white px-6 py-3 rounded-lg font-normal text-base flex items-center w-full sm:w-auto">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <button onclick="copyAndAddDataSet()" class="btn-glow btn-blue text-white px-5 py-4 rounded-xl font-medium text-base flex items-center justify-center gap-2 w-full hover:scale-105 transition-transform">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                 </svg>
-                คัดลอกโดยเพิ่มชุดข้อมูล
+                <span>คัดลอกโดยเพิ่มชุดข้อมูล</span>
             </button>
-            <button onclick="resetToSingleDataSet()" class="btn-glow btn-red text-white px-6 py-3 rounded-lg font-normal text-base flex items-center w-full sm:w-auto">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <button onclick="resetToSingleDataSet()" class="btn-glow btn-red text-white px-5 py-4 rounded-xl font-medium text-base flex items-center justify-center gap-2 w-full hover:scale-105 transition-transform">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 5V2L8 6l4 4V7c2.757 0 5 2.243 5 5a5 5 0 0 1-5 5c-2.05 0-3.813-1.232-4.58-3H5.35c.84 3.45 3.95 6 7.65 6 4.418 0 8-3.582 8-8s-3.582-8-8-8z"/>
                 </svg>
-                รีเซ็ตการบันทึกข้อมูล
+                <span>รีเซ็ตการบันทึกข้อมูล</span>
             </button>
-            <button onclick="exportPNG()" class="btn-glow text-white px-6 py-3 rounded-lg font-normal text-base flex items-center w-full sm:w-auto" style="background-color: #f50494;">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2 2.5 3-4 4.5 6H6l2.5-4.5zM8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+            <button onclick="exportPNG()" class="btn-glow text-white px-5 py-4 rounded-xl font-medium text-base flex items-center justify-center gap-2 w-full hover:scale-105 transition-transform" style="background: linear-gradient(135deg, #f50494, #c0037a);">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2 2.5 3-4 4.5 6H6l2.5-4.5z"/>
                 </svg>
-                บันทึกเป็นรูปภาพ
+                <span>บันทึกเป็นรูปภาพ</span>
             </button>
         </div>
     </div>
 
     <!-- Action Buttons -->
-    <div class="glass rounded-lg mx-4 my-6 p-6 w-full max-w-full px-2">
-        <div class="flex flex-wrap gap-4 justify-center w-full max-w-full sm:flex-row flex-col">
-            <button onclick="submitData()" class="btn-glow btn-orange text-white px-6 py-3 rounded-lg font-normal text-base flex items-center w-full sm:w-auto">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+    <div class="glass rounded-lg mx-4 my-6 p-6 w-full max-w-full">
+        <h3 class="text-white text-lg font-semibold mb-4 text-center"></h3>
+        <div class="flex justify-center">
+            <button onclick="submitData()" class="btn-glow btn-orange text-white px-8 py-5 rounded-xl font-semibold text-lg flex items-center justify-center gap-3 w-full sm:w-auto min-w-[280px] hover:scale-105 transition-transform shadow-xl">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                 </svg>
-                บันทึกข้อมูลทั้งหมด
+                <span>บันทึกข้อมูลทั้งหมด</span>
             </button>
-
         </div>
     </div>
 
