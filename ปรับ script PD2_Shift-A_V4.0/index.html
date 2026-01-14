@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" style="overflow-x:hidden;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,6 +9,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* Prevent horizontal scroll */
+        * { 
+            max-width: 100vw; 
+        }
+        html, body {
+            overflow-x: hidden !important;
+            width: 100%;
+            position: relative;
+        }
         /* Success Modal Animations */
         @keyframes slideInDown {
             from {
@@ -1123,10 +1132,13 @@
                 SYSTEM_HEALTH.performanceMetrics.loadTime = loadTime;
                 console.log(`⚡ ระบบโหลดเสร็จใน ${loadTime.toFixed(2)}ms`);
                 
-                // Show system ready notification
-                setTimeout(() => {
-                    showNotification('ระบบพร้อมให้บริการแล้ว', 'success');
-                }, 1000);
+                // แสดง notification เฉพาะเมื่อโหลดข้อมูลสำเร็จจริง
+                const stored = LS.get('productionData');
+                if (stored) {
+                    setTimeout(() => {
+                        showNotification('ระบบพร้อมให้บริการแล้ว', 'success');
+                    }, 800);
+                }
                 
             } catch (error) {
                 ERROR_LOG.log(error, 'System initialization');
@@ -3013,7 +3025,8 @@
                 try { window.PD2_WAGE_A && window.PD2_WAGE_A.bindWageAForAllSets(); } catch(_){}
                 
                 console.log('📂 โหลดข้อมูลเรียบร้อยแล้ว');
-                showNotification('โหลดข้อมูลจากระบบสำเร็จแล้ว', 'success');
+                // ลบ notification ที่เด้งขึ้นทุกครั้ง - ไม่จำเป็น
+                // showNotification('โหลดข้อมูลจากระบบสำเร็จแล้ว', 'success');
                 
             } catch (error) {
                 console.error('❌ ไม่สามารถโหลดข้อมูลได้:', error);
