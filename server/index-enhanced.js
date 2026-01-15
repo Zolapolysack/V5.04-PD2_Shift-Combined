@@ -10,7 +10,7 @@ import rateLimit from 'express-rate-limit';
 import cluster from 'cluster';
 import os from 'os';
 
-import sheetsRouterFactory from './routes/sheets.js';
+import sheetsRouterFactory from './routes/sheets-enhanced.js';
 import logger from './logger.js';
 import fs from 'fs';
 

@@ -412,27 +412,25 @@
 </head>
 <!-- mobile responsive fix: add bottom safe-area padding for Android navbar avoidance -->
 <body class="min-h-screen pb-[env(safe-area-inset-bottom,0)]" style="overflow-x:hidden;">
-    <!-- Back to Home Button (Mobile-First Navigation) -->
-    <div class="fixed top-4 left-4 z-50">
-        <a href="../index.html" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-500 to-red-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+    <!-- Header Section -->
+    <div class="glass-strong rounded-lg mx-4 mt-4 p-6 mb-6 relative">
+        <!-- Back to Home Button (Mobile-First Navigation) -->
+        <a href="../index.html" class="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-rose-500 to-red-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 z-10">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
             <span class="font-medium">กลับหน้าหลัก</span>
         </a>
-    </div>
-
-    <!-- Header Section -->
-    <div class="glass-strong rounded-lg mx-4 mt-4 p-6 mb-6">
-        <div class="text-center mb-4">
+        
+        <div class="text-center mb-4 pt-12">
             <h1 class="text-3xl font-medium text-gray-800 tracking-normal leading-relaxed">ระบบบันทึกข้อมูลรายงานแผนกผลิต 2</h1>
             <div class="w-16 h-0.5 bg-gray-400 mx-auto mt-3"></div>
         </div>
         
         <!-- Status Bar -->
-        <div class="flex items-center justify-between bg-white rounded-lg p-4">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 bg-white rounded-lg p-4">
             <div class="flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <defs>
                         <linearGradient id="statusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
@@ -442,11 +440,11 @@
                     <circle fill="url(#statusGrad)" cx="12" cy="12" r="10"/>
                     <path stroke="white" stroke-width="2" d="m9 12 2 2 4-4"/>
                 </svg>
-                <span class="font-normal text-gray-700 text-base">สถานะ: พร้อมใช้งาน</span>
+                <span class="font-normal text-gray-700 text-sm md:text-base">สถานะ: พร้อมใช้งาน</span>
             </div>
             
             <div class="flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <defs>
                         <linearGradient id="shiftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
@@ -463,11 +461,11 @@
                     <line stroke="white" stroke-width="2" x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
                     <line stroke="white" stroke-width="2" x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                 </svg>
-                <span class="font-normal text-gray-700 text-base">สำหรับ กะ B (20:00-08:00 น.)</span>
+                <span class="font-normal text-gray-700 text-sm md:text-base">สำหรับ กะ B (20:00-08:00 น.)</span>
             </div>
             
             <div class="flex items-center">
-                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <defs>
                         <linearGradient id="timeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
@@ -477,7 +475,7 @@
                     <circle fill="url(#timeGrad)" cx="12" cy="12" r="10"/>
                     <polyline stroke="white" stroke-width="2" points="12,6 12,12 16,14"/>
                 </svg>
-                <span class="font-normal text-gray-700 text-base" id="currentTime"></span>
+                <span class="font-normal text-gray-700 text-sm md:text-base" id="currentTime"></span>
             </div>
         </div>
     </div>
