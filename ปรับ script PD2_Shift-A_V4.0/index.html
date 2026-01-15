@@ -434,9 +434,6 @@
         <!-- Language Selector Button (Top Right) -->
         <div class="absolute top-4 right-4 z-10">
             <button onclick="toggleLanguageMenu()" class="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
-                </svg>
                 <span class="font-medium" id="currentLanguage">ไทย</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -444,22 +441,18 @@
             </button>
             
             <!-- Language Dropdown Menu -->
-            <div id="languageMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl overflow-hidden z-20">
-                <button onclick="changeLanguage('th')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2 border-b">
-                    <span class="text-2xl">🇹🇭</span>
+            <div id="languageMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-20 max-h-64 overflow-y-auto">
+                <button onclick="changeLanguage('th')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors border-b">
                     <span class="font-medium text-gray-700">ภาษาไทย</span>
                 </button>
-                <button onclick="changeLanguage('en')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2 border-b">
-                    <span class="text-2xl">🇬🇧</span>
+                <button onclick="changeLanguage('en')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors border-b">
                     <span class="font-medium text-gray-700">English</span>
                 </button>
-                <button onclick="changeLanguage('my')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2 border-b">
-                    <span class="text-2xl">🇲🇲</span>
+                <button onclick="changeLanguage('my')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors border-b">
                     <span class="font-medium text-gray-700">မြန်မာ</span>
                 </button>
-                <button onclick="changeLanguage('mnw')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2">
-                    <span class="text-2xl">🌐</span>
-                    <span class="font-medium text-gray-700">မန် (Mon)</span>
+                <button onclick="changeLanguage('mnw')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors">
+                    <span class="font-medium text-gray-700">မန်</span>
                 </button>
             </div>
         </div>
@@ -538,7 +531,7 @@
                     <line stroke="white" stroke-width="2" x1="8" y1="2" x2="8" y2="6"/>
                     <line stroke="white" stroke-width="2" x1="3" y1="10" x2="21" y2="10"/>
                 </svg>
-                <span class="font-normal text-gray-700 text-base" style="color:#000000;">จำนวนชุดข้อมูล: <span id="dataSetCount" class="text-blue-600 font-medium" style="color:#ff0000;">1</span>/100</span>
+                <span class="font-normal text-gray-700 text-base" style="color:#000000;"><span data-i18n="dataset.count">จำนวนชุดข้อมูล</span>: <span id="dataSetCount" class="text-blue-600 font-medium" style="color:#ff0000;">1</span>/100</span>
             </div>
         </div>
     </div>
@@ -556,25 +549,25 @@
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
                 </svg>
-                <span>เพิ่มชุดข้อมูลใหม่</span>
+                <span data-i18n="btn.add">เพิ่มชุดข้อมูลใหม่</span>
             </button>
             <button onclick="copyAndAddDataSet()" class="btn-glow btn-blue text-white px-5 py-4 rounded-xl font-medium text-base flex items-center justify-center gap-2 w-full hover:scale-105 transition-transform">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                 </svg>
-                <span>คัดลอกโดยเพิ่มชุดข้อมูล</span>
+                <span data-i18n="btn.copy">คัดลอกโดยเพิ่มชุดข้อมูล</span>
             </button>
             <button onclick="resetToSingleDataSet()" class="btn-glow btn-red text-white px-5 py-4 rounded-xl font-medium text-base flex items-center justify-center gap-2 w-full hover:scale-105 transition-transform">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 5V2L8 6l4 4V7c2.757 0 5 2.243 5 5a5 5 0 0 1-5 5c-2.05 0-3.813-1.232-4.58-3H5.35c.84 3.45 3.95 6 7.65 6 4.418 0 8-3.582 8-8s-3.582-8-8-8z"/>
                 </svg>
-                <span>รีเซ็ตการบันทึกข้อมูล</span>
+                <span data-i18n="btn.reset">รีเซ็ตการบันทึกข้อมูล</span>
             </button>
             <button onclick="exportPNG()" class="btn-glow text-white px-5 py-4 rounded-xl font-medium text-base flex items-center justify-center gap-2 w-full hover:scale-105 transition-transform" style="background: linear-gradient(135deg, #f50494, #c0037a);">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2 2.5 3-4 4.5 6H6l2.5-4.5z"/>
                 </svg>
-                <span>บันทึกเป็นรูปภาพ</span>
+                <span data-i18n="btn.export">บันทึกเป็นรูปภาพ</span>
             </button>
         </div>
     </div>
@@ -587,7 +580,7 @@
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                 </svg>
-                <span>บันทึกข้อมูลทั้งหมด</span>
+                <span data-i18n="btn.save">บันทึกข้อมูลทั้งหมด</span>
             </button>
         </div>
     </div>
@@ -1318,7 +1311,7 @@
                                 <rect fill="url(#setGrad${setNumber})" x="3" y="4" width="18" height="15" rx="2" ry="2"/>
                                 <polyline stroke="white" stroke-width="2" points="16,10 12,14 8,10"/>
                             </svg>
-                            ชุดข้อมูลที่ ${setNumber}
+                            ${t('dataset.number')} ${setNumber}
                         </h2>
                         ${setNumber > 1 ? `
                             <button onclick="removeDataSet(${setNumber})" class="btn-glow btn-red text-white px-3 py-2 rounded-lg font-normal text-sm flex items-center">
@@ -1345,54 +1338,54 @@
                                     <circle fill="url(#basicGrad)" cx="12" cy="12" r="10"/>
                                     <path stroke="white" stroke-width="2" d="m9 12 2 2 4-4"/>
                                 </svg>
-                                ข้อมูลพื้นฐาน
+                                ${t('section.basic')}
                             </h3>
                             
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block font-medium mb-2 text-base">วันที่</label>
+                                    <label class="block font-medium mb-2 text-base">${t('field.date')}</label>
                                     <input type="date" name="date_${setNumber}" value="${today}" class="input-field w-full p-3 border border-gray-300 rounded-lg">
                                 </div>
                                 
                                 <div>
-                                        <label class="block font-medium mb-2 text-base">เครื่องทอ NO</label>
+                                        <label class="block font-medium mb-2 text-base">${t('field.machine')}</label>
                                     <select name="machine_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg">
-                                        <option value="">เลือกเครื่องทอ</option>
+                                        <option value="">${t('field.machine.select')}</option>
                                         ${machines.map(machine => `<option value="${machine}">${machine}</option>`).join('')}
                                         <option value="ADD_NEW">คีย์ข้อมูลใหม่</option>
                                     </select>
                                     <div class="mt-3">
-                                        <label class="block font-medium mb-2 text-base">เครื่องทอ NO (กรอกเอง)</label>
-                                        <input type="text" name="machineManual_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="พิมพ์หมายเลขเครื่อง เช่น CL96">
-                                        <p class="text-xs text-gray-200 mt-1">เลือกได้ 2 ทาง: เลือกจากรายการ หรือกรอกเอง</p>
+                                        <label class="block font-medium mb-2 text-base">${t('field.machine.custom')}</label>
+                                        <input type="text" name="machineManual_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="${t('field.machine.placeholder')}">
+                                        <p class="text-xs text-gray-200 mt-1">${t('helper.select')}</p>
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    <label class="block font-medium mb-2 text-base">ชื่อพนักงานทอ กะ A</label>
+                                    <label class="block font-medium mb-2 text-base">${t('field.employee.a')}</label>
                                     <select name="employeeA_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg">
-                                        <option value="">เลือกพนักงาน</option>
+                                        <option value="">${t('field.employee.select')}</option>
                                         ${employees.map(emp => `<option value="${emp.id}">${emp.id} - ${emp.name}</option>`).join('')}
                                         <option value="ADD_NEW">คีย์ข้อมูลใหม่</option>
                                     </select>
                                     <div class="mt-3">
-                                        <label class="block font-medium mb-2 text-base">ชื่อพนักงานทอ กะ A (กรอกเอง)</label>
-                                        <input type="text" name="employeeAManual_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="พิมพ์รหัสหรือชื่อ">
-                                        <p class="text-xs text-gray-200 mt-1">เลือกได้ 2 ทาง: เลือกจากรายการ หรือกรอกเอง</p>
+                                        <label class="block font-medium mb-2 text-base">${t('field.employee.custom.a')}</label>
+                                        <input type="text" name="employeeAManual_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="${t('field.employee.placeholder')}">
+                                        <p class="text-xs text-gray-200 mt-1">${t('helper.select')}</p>
                                     </div>
                                 </div>
                                 
                                 <div>
-                                    <label class="block font-medium mb-2 text-base">ขนาดหน้าผ้า</label>
+                                    <label class="block font-medium mb-2 text-base">${t('field.fabric.size')}</label>
                                     <select name="fabricSize_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg">
-                                        <option value="">เลือกขนาดหน้าผ้า</option>
+                                        <option value="">${t('field.fabric.select')}</option>
                                         ${fabricSizes.map(size => `<option value="${size}">${size}</option>`).join('')}
                                         <option value="ADD_NEW">คีย์ข้อมูลใหม่</option>
                                     </select>
                                     <div class="mt-3">
-                                        <label class="block font-medium mb-2 text-base">ขนาดหน้าผ้า (กรอกเอง)</label>
-                                        <input type="text" name="fabricSizeManual_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="พิมพ์ขนาดหน้าผ้า">
-                                        <p class="text-xs text-gray-200 mt-1">เลือกได้ 2 ทาง: เลือกจากรายการ หรือกรอกเอง</p>
+                                        <label class="block font-medium mb-2 text-base">${t('field.fabric.custom')}</label>
+                                        <input type="text" name="fabricSizeManual_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="${t('field.fabric.placeholder')}">
+                                        <p class="text-xs text-gray-200 mt-1">${t('helper.select')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -1413,18 +1406,18 @@
                                         <circle fill="url(#meterGrad)" cx="12" cy="12" r="10"/>
                                         <polyline stroke="white" stroke-width="2" points="12,6 12,12 16,14"/>
                                     </svg>
-                                    เลขมิเตอร์ประจำวัน
+                                    ${t('section.meter')}
                                 </h3>
                                 
                                 <div class="space-y-4">
                                     <div>
-                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">กะ A: เริ่มงาน</label>
-                                        <input type="number" name="meterStartA_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="เช่น 500">
+                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">${t('field.meter.start')}</label>
+                                        <input type="number" name="meterStartA_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="${t('field.meter.placeholder')}">
                                     </div>
                                     
                                     <div>
-                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">กะ A: เลิกงาน</label>
-                                        <input type="number" name="meterEndA_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="เช่น 1000">
+                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">${t('field.meter.end')}</label>
+                                        <input type="number" name="meterEndA_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="${t('field.meter.placeholder.end')}">
                                     </div>
                                 </div>
                             </div>
@@ -1453,18 +1446,18 @@
                                         <circle fill="white" cx="6" cy="16" r="1"/>
                                         <path stroke="white" stroke-width="1.5" d="M18 6v12"/>
                                     </svg>
-                                    ความยาวตัดม้วน และ ค่าแรงพนักงาน
+                                    ${t('section.length')}
                                 </h3>
                                 
                                 <div class="space-y-4">
                                     <div>
-                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">ความยาวตัดม้วน (เมตร)</label>
-                                        <input type="number" name="lengthA_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="เช่น 2500" step="0.01">
+                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">${t('field.length')}</label>
+                                        <input type="number" name="lengthA_${setNumber}" class="input-field w-full p-3 border border-gray-300 rounded-lg" placeholder="${t('field.length.placeholder')}" step="0.01">
                                     </div>
                                     
                                     <div>
-                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">ค่าแรงพนักงาน (กะ A)</label>
-                                        <input type="text" name="wageA_${setNumber}" class="input-field wage-a-input w-full p-3 border border-gray-300 rounded-lg" placeholder="ค่าแรงพนักงาน" inputmode="decimal" autocomplete="off" readonly>
+                                        <label class="block font-medium mb-2 text-base" style="color: white; font-weight: 450; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">${t('field.wage.a')}</label>
+                                        <input type="text" name="wageA_${setNumber}" class="input-field wage-a-input w-full p-3 border border-gray-300 rounded-lg" placeholder="${t('field.wage.placeholder')}" inputmode="decimal" autocomplete="off" readonly>
                                         <p class="text-xs text-red-500 mt-1 hidden" data-wageA-error="${setNumber}"></p>
                                     </div>
                                 </div>
@@ -3222,15 +3215,27 @@
             'mnw': 'မန်'
         };
         
+        // Helper function to get translation with safety check
+        function t(key) {
+            // Safety: Check if translations object exists
+            if (typeof translations === 'undefined') {
+                console.warn('⚠️ Translations not loaded yet, using Thai fallback');
+                return key; // Return key as fallback
+            }
+            return translations[currentLang]?.[key] || translations['th']?.[key] || key;
+        }
+        
         // Toggle language menu dropdown
         function toggleLanguageMenu() {
             const menu = document.getElementById('languageMenu');
-            menu.classList.toggle('hidden');
+            if (menu) menu.classList.toggle('hidden');
         }
         
         // Close language menu when clicking outside
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('languageMenu');
+            if (!menu) return;
+            
             const button = event.target.closest('button[onclick="toggleLanguageMenu()"]');
             
             if (!button && !menu.contains(event.target)) {
@@ -3240,70 +3245,163 @@
         
         // Change language function
         function changeLanguage(lang) {
+            // Safety check
+            if (typeof translations === 'undefined') {
+                console.error('❌ Translations not loaded');
+                alert('กรุณารอสักครู่... ระบบกำลังโหลดภาษา');
+                return;
+            }
+            
             if (!translations[lang]) {
                 console.error('Language not supported:', lang);
                 return;
             }
             
-            currentLang = lang;
-            localStorage.setItem('pd2_language', lang);
-            
-            // Update current language display
-            document.getElementById('currentLanguage').textContent = languageNames[lang];
-            
-            // Update all elements with data-i18n attribute
-            updatePageLanguage();
-            
-            // Hide menu after selection
-            document.getElementById('languageMenu').classList.add('hidden');
-            
-            // Show notification
             try {
-                if (window.PD2Notify) {
-                    window.PD2Notify.show(
-                        translations[lang]['lang.select'] || 'Language changed',
-                        'success',
-                        3000
-                    );
+                currentLang = lang;
+                localStorage.setItem('pd2_language', lang);
+                
+                // Update current language display
+                const langDisplay = document.getElementById('currentLanguage');
+                if (langDisplay) langDisplay.textContent = languageNames[lang];
+                
+                // Update all elements with data-i18n attribute
+                updatePageLanguage();
+                
+                // Regenerate all data sets to apply translation
+                regenerateAllDataSets();
+                
+                // Hide menu after selection
+                const menu = document.getElementById('languageMenu');
+                if (menu) menu.classList.add('hidden');
+                
+                // Show notification
+                try {
+                    if (window.PD2Notify) {
+                        window.PD2Notify.show(
+                            translations[lang]['lang.select'] || 'Language changed',
+                            'success',
+                            2000
+                        );
+                    }
+                } catch(e) {
+                    console.log('Language changed to:', languageNames[lang]);
                 }
-            } catch(e) {
-                console.log('Language changed to:', languageNames[lang]);
+            } catch (error) {
+                console.error('❌ Error changing language:', error);
+                alert('เกิดข้อผิดพลาดในการเปลี่ยนภาษา กรุณาลองใหม่อีกครั้ง');
             }
         }
         
         // Update all translatable elements on the page
         function updatePageLanguage() {
-            const elements = document.querySelectorAll('[data-i18n]');
-            const currentTranslations = translations[currentLang];
-            
-            elements.forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (currentTranslations[key]) {
-                    // Update text content
-                    element.textContent = currentTranslations[key];
-                    
-                    // Update placeholder if it's an input
-                    if (element.tagName === 'INPUT' && element.placeholder) {
-                        element.placeholder = currentTranslations[key];
-                    }
+            try {
+                const elements = document.querySelectorAll('[data-i18n]');
+                const currentTranslations = translations[currentLang];
+                
+                if (!currentTranslations) {
+                    console.warn('⚠️ No translations for:', currentLang);
+                    return;
                 }
-            });
+                
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (currentTranslations[key]) {
+                        // Update text content
+                        element.textContent = currentTranslations[key];
+                        
+                        // Update placeholder if it's an input
+                        if (element.tagName === 'INPUT' && element.placeholder) {
+                            element.placeholder = currentTranslations[key];
+                        }
+                    }
+                });
+                
+                // Update document title
+                if (currentTranslations['system.title']) {
+                    document.title = currentTranslations['system.title'] + ' - ' + 
+                                     (currentTranslations['shift.a'] || 'Shift A');
+                }
+            } catch (error) {
+                console.error('❌ Error updating page language:', error);
+            }
+        }
+        
+        // Regenerate all data sets with current language
+        function regenerateAllDataSets() {
+            const container = document.getElementById('dataContainer');
+            if (!container) {
+                console.warn('⚠️ Data container not found');
+                return;
+            }
             
-            // Update document title
-            if (currentTranslations['system.title']) {
-                document.title = currentTranslations['system.title'] + ' - ' + 
-                                 (currentTranslations['shift.a'] || 'Shift A');
+            try {
+                // Save current form values before regenerating
+                const currentData = [];
+                for (let i = 1; i <= dataSetCount; i++) {
+                    const setData = {};
+                    const inputs = container.querySelectorAll(`[name^="date_${i}"], [name^="machine_${i}"], [name^="machineManual_${i}"], [name^="employeeA_${i}"], [name^="employeeAManual_${i}"], [name^="fabricSize_${i}"], [name^="fabricSizeManual_${i}"], [name^="meterStartA_${i}"], [name^="meterEndA_${i}"], [name^="rollLength_${i}"], [name^="lengthA_${i}"], [name^="wageA_${i}"]`);
+                    inputs.forEach(input => {
+                        setData[input.name] = input.value;
+                    });
+                    currentData.push(setData);
+                }
+                
+                // Regenerate all sets
+                container.innerHTML = '';
+                for (let i = 1; i <= dataSetCount; i++) {
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = generateDataSet(i);
+                    const child = wrapper.firstElementChild;
+                    if (child) container.appendChild(child);
+                }
+                
+                // Restore form values
+                currentData.forEach((setData, index) => {
+                    Object.keys(setData).forEach(name => {
+                        const input = container.querySelector(`[name="${name}"]`);
+                        if (input) input.value = setData[name];
+                    });
+                });
+                
+                // Re-initialize handlers
+                setupSelectHandlers();
+                refreshAllSelects();
+                try { window.PD2_WAGE_A && window.PD2_WAGE_A.bindWageAForAllSets(); } catch(e) {
+                    console.warn('⚠️ Wage calculator not available:', e.message);
+                }
+                
+                console.log('✅ Data sets regenerated with language:', currentLang);
+            } catch (error) {
+                console.error('❌ Error regenerating data sets:', error);
+                // Don't throw - keep existing data if regeneration fails
             }
         }
         
         // Initialize language on page load
         document.addEventListener('DOMContentLoaded', function() {
-            // Set initial language display
-            document.getElementById('currentLanguage').textContent = languageNames[currentLang];
-            
-            // Apply saved language
-            if (currentLang !== 'th') {
-                updatePageLanguage();
+            try {
+                // Check if translations loaded
+                if (typeof translations === 'undefined') {
+                    console.error('❌ Translations script not loaded!');
+                    return;
+                }
+                
+                // Set initial language display
+                const langDisplay = document.getElementById('currentLanguage');
+                if (langDisplay) {
+                    langDisplay.textContent = languageNames[currentLang];
+                }
+                
+                // Apply saved language (don't regenerate for Thai - it's default)
+                if (currentLang !== 'th') {
+                    setTimeout(() => {
+                        updatePageLanguage();
+                        regenerateAllDataSets();
+                    }, 100); // Small delay to ensure DOM is ready
+                }
+            } catch (error) {
+                console.error('❌ Error initializing language:', error);
             }
         });
 
