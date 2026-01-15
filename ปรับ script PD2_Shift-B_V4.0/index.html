@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>ระบบบันทึกข้อมูลรายงานแผนกผลิต 2 - กะ B </title>
     <script src="https://cdn.tailwindcss.com/3.4.10"></script>
+    <script src="../assets/js/i18n-translations.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
@@ -403,11 +404,44 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
-            <span class="font-medium">กลับหน้าหลัก</span>
+            <span class="font-medium" data-i18n="nav.back">กลับหน้าหลัก</span>
         </a>
         
+        <!-- Language Selector Button (Top Right) -->
+        <div class="absolute top-4 right-4 z-10">
+            <button onclick="toggleLanguageMenu()" class="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                </svg>
+                <span class="font-medium" id="currentLanguage">ไทย</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            
+            <!-- Language Dropdown Menu -->
+            <div id="languageMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl overflow-hidden z-20">
+                <button onclick="changeLanguage('th')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2 border-b">
+                    <span class="text-2xl">🇹🇭</span>
+                    <span class="font-medium text-gray-700">ภาษาไทย</span>
+                </button>
+                <button onclick="changeLanguage('en')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2 border-b">
+                    <span class="text-2xl">🇬🇧</span>
+                    <span class="font-medium text-gray-700">English</span>
+                </button>
+                <button onclick="changeLanguage('my')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2 border-b">
+                    <span class="text-2xl">🇲🇲</span>
+                    <span class="font-medium text-gray-700">မြန်မာ</span>
+                </button>
+                <button onclick="changeLanguage('mnw')" class="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors flex items-center gap-2">
+                    <span class="text-2xl">🌐</span>
+                    <span class="font-medium text-gray-700">မန် (Mon)</span>
+                </button>
+            </div>
+        </div>
+        
         <div class="text-center mb-4 pt-12">
-            <h1 class="text-3xl font-medium text-gray-800 tracking-normal leading-relaxed">ระบบบันทึกข้อมูลรายงานแผนกผลิต 2</h1>
+            <h1 class="text-3xl font-medium text-gray-800 tracking-normal leading-relaxed" data-i18n="system.title">ระบบบันทึกข้อมูลรายงานแผนกผลิต 2</h1>
             <div class="w-16 h-0.5 bg-gray-400 mx-auto mt-3"></div>
         </div>
         
@@ -424,7 +458,7 @@
                     <circle fill="url(#statusGrad)" cx="12" cy="12" r="10"/>
                     <path stroke="white" stroke-width="2" d="m9 12 2 2 4-4"/>
                 </svg>
-                <span class="font-normal text-gray-700 text-sm md:text-base">สถานะ: พร้อมใช้งาน</span>
+                <span class="font-normal text-gray-700 text-sm md:text-base" data-i18n="status.ready">สถานะ: พร้อมใช้งาน</span>
             </div>
             
             <div class="flex items-center">
@@ -445,7 +479,7 @@
                     <line stroke="white" stroke-width="2" x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
                     <line stroke="white" stroke-width="2" x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                 </svg>
-                <span class="font-normal text-gray-700 text-sm md:text-base">สำหรับ กะ B (20:00-08:00 น.)</span>
+                <span class="font-normal text-gray-700 text-sm md:text-base" data-i18n="shift.b">สำหรับ กะ B (20:00-08:00 น.)</span>
             </div>
             
             <div class="flex items-center">
@@ -3141,6 +3175,107 @@
         };
         requestAnimationFrame(() => requestAnimationFrame(notifyReady));
     } catch(_){}
+</script>
+<script>
+    // ============================================
+    // Multi-Language System (i18n)
+    // ============================================
+    
+    // Get current language from localStorage or default to Thai
+    let currentLang = localStorage.getItem('pd2_language') || 'th';
+    
+    // Language display names
+    const languageNames = {
+        'th': 'ไทย',
+        'en': 'English',
+        'my': 'မြန်မာ',
+        'mnw': 'မန်'
+    };
+    
+    // Toggle language menu dropdown
+    function toggleLanguageMenu() {
+        const menu = document.getElementById('languageMenu');
+        menu.classList.toggle('hidden');
+    }
+    
+    // Close language menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('languageMenu');
+        const button = event.target.closest('button[onclick="toggleLanguageMenu()"]');
+        
+        if (!button && !menu.contains(event.target)) {
+            menu.classList.add('hidden');
+        }
+    });
+    
+    // Change language function
+    function changeLanguage(lang) {
+        if (!translations[lang]) {
+            console.error('Language not supported:', lang);
+            return;
+        }
+        
+        currentLang = lang;
+        localStorage.setItem('pd2_language', lang);
+        
+        // Update current language display
+        document.getElementById('currentLanguage').textContent = languageNames[lang];
+        
+        // Update all elements with data-i18n attribute
+        updatePageLanguage();
+        
+        // Hide menu after selection
+        document.getElementById('languageMenu').classList.add('hidden');
+        
+        // Show notification
+        try {
+            if (window.PD2Notify) {
+                window.PD2Notify.show(
+                    translations[lang]['lang.select'] || 'Language changed',
+                    'success',
+                    3000
+                );
+            }
+        } catch(e) {
+            console.log('Language changed to:', languageNames[lang]);
+        }
+    }
+    
+    // Update all translatable elements on the page
+    function updatePageLanguage() {
+        const elements = document.querySelectorAll('[data-i18n]');
+        const currentTranslations = translations[currentLang];
+        
+        elements.forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            if (currentTranslations[key]) {
+                // Update text content
+                element.textContent = currentTranslations[key];
+                
+                // Update placeholder if it's an input
+                if (element.tagName === 'INPUT' && element.placeholder) {
+                    element.placeholder = currentTranslations[key];
+                }
+            }
+        });
+        
+        // Update document title
+        if (currentTranslations['system.title']) {
+            document.title = currentTranslations['system.title'] + ' - ' + 
+                             (currentTranslations['shift.b'] || 'Shift B');
+        }
+    }
+    
+    // Initialize language on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set initial language display
+        document.getElementById('currentLanguage').textContent = languageNames[currentLang];
+        
+        // Apply saved language
+        if (currentLang !== 'th') {
+            updatePageLanguage();
+        }
+    });
 </script>
 </body>
 </html>
