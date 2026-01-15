@@ -399,16 +399,6 @@
         })();
     </script>
     <!-- LEGACY / OLD MOBILE SUPPORT END -->
-    <style id="pd2-reduced-motion-global">
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                transition: none !important;
-                animation: none !important;
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-            }
-        }
-    </style>
 </head>
 <!-- mobile responsive fix: add bottom safe-area padding for Android navbar avoidance -->
 <body class="min-h-screen pb-[env(safe-area-inset-bottom,0)]" style="overflow-x:hidden;">
