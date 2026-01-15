@@ -327,9 +327,8 @@
             background:rgba(255,255,255,0.88) !important; 
             border-color:rgba(0,0,0,0.08) !important;
         }
-        /* ลดเอฟเฟกต์เงา/อนิเมชัน หากเครื่องเก่า (เราจะเติมคลาส reduced-effects จาก JS) */
-        .reduced-effects * { transition:none !important; animation:none !important; }
-        .reduced-effects .btn-glow:hover, .reduced-effects .button-glow:hover { transform:none !important; box-shadow:none !important; }
+        /* ===== ANIMATIONS & TRANSITIONS ===== */
+        .btn-glow:hover, .button-glow:hover { transform:none !important; box-shadow:none !important; }
     </style>
     <script>
         /* Feature / capability detection + polyfills loader สำหรับเบราว์เซอร์เก่า */
@@ -358,11 +357,6 @@
                     }
                 })();
             } catch(e){ docEl.classList.add('no-backdrop'); }
-
-            // ประเมินประสิทธิภาพคร่าว ๆ (อุปกรณ์เก่า: หน่วยความจำต่ำ / CPU ช้า -> ปิดอนิเมชันหนัก ๆ)
-            if(navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4){
-                docEl.classList.add('reduced-effects');
-            }
 
             // Polyfill: Promise
             if(typeof Promise === 'undefined'){
