@@ -3176,6 +3176,8 @@
     
     // Get current language from localStorage or default to Thai
     let currentLang = localStorage.getItem('pd2_language') || 'th';
+    let isChangingLanguage = false; // Flag to prevent race condition
+    let languageChangeTimeout = null; // Debounce timeout
     
     // Language display names
     const languageNames = {
@@ -3215,6 +3217,12 @@
     
     // Change language function
     function changeLanguage(lang) {
+        // Prevent multiple simultaneous language changes
+        if (isChangingLanguage) {
+            console.warn('⚠️ Language change in progress, please wait...');
+            return;
+        }
+        
         // Safety check
         if (typeof translations === 'undefined') {
             console.error('❌ Translations not loaded');
@@ -3227,39 +3235,54 @@
             return;
         }
         
+        // Clear any pending language change
+        if (languageChangeTimeout) {
+            clearTimeout(languageChangeTimeout);
+        }
+        
+        isChangingLanguage = true;
+        
         try {
             currentLang = lang;
             localStorage.setItem('pd2_language', lang);
             
-            // Update current language display
+            // Update current language display immediately
             const langDisplay = document.getElementById('currentLanguage');
             if (langDisplay) langDisplay.textContent = languageNames[lang];
             
-            // Update all elements with data-i18n attribute
-            updatePageLanguage();
-            
-            // Regenerate all data sets to apply translation
-            regenerateAllDataSets();
-            
-            // Hide menu after selection
+            // Hide menu immediately
             const menu = document.getElementById('languageMenu');
             if (menu) menu.classList.add('hidden');
             
-            // Show notification
-            try {
-                if (window.PD2Notify) {
-                    window.PD2Notify.show(
-                        translations[lang]['lang.select'] || 'Language changed',
-                        'success',
-                        2000
-                    );
+            // Batch update UI with slight delay to ensure clean state
+            languageChangeTimeout = setTimeout(() => {
+                try {
+                    // Update all static elements with data-i18n attribute
+                    updatePageLanguage();
+                    
+                    // Regenerate all data sets to apply translation
+                    regenerateAllDataSets();
+                    
+                    // Show notification
+                    try {
+                        if (window.PD2Notify) {
+                            window.PD2Notify.show(
+                                translations[lang]['lang.select'] || 'Language changed',
+                                'success',
+                                2000
+                            );
+                        }
+                    } catch(e) {
+                        console.log('Language changed to:', languageNames[lang]);
+                    }
+                } finally {
+                    isChangingLanguage = false;
                 }
-            } catch(e) {
-                console.log('Language changed to:', languageNames[lang]);
-            }
+            }, 50);
         } catch (error) {
             console.error('❌ Error changing language:', error);
             alert('เกิดข้อผิดพลาดในการเปลี่ยนภาษา กรุณาลองใหม่อีกครั้ง');
+            isChangingLanguage = false;
         }
     }
     
@@ -3310,38 +3333,61 @@
             const currentData = [];
             for (let i = 1; i <= dataSetCount; i++) {
                 const setData = {};
-                const inputs = container.querySelectorAll(`[name^="date_${i}"], [name^="machine_${i}"], [name^="machineManual_${i}"], [name^="employeeA_${i}"], [name^="employeeAManual_${i}"], [name^="fabricSize_${i}"], [name^="fabricSizeManual_${i}"], [name^="meterStartA_${i}"], [name^="meterEndA_${i}"], [name^="rollLength_${i}"], [name^="lengthA_${i}"], [name^="wageB_${i}"]`);
-                inputs.forEach(input => {
-                    setData[input.name] = input.value;
+                // Query ALL input fields for this set number
+                const allInputs = container.querySelectorAll(`input[name*="_${i}"], select[name*="_${i}"]`);
+                allInputs.forEach(input => {
+                    if (input.name) {
+                        setData[input.name] = input.value;
+                    }
                 });
                 currentData.push(setData);
             }
             
-            // Regenerate all sets
-            container.innerHTML = '';
-            for (let i = 1; i <= dataSetCount; i++) {
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = generateDataSet(i);
-                const child = wrapper.firstElementChild;
-                if (child) container.appendChild(child);
+            // Force clear container completely
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
             }
             
-            // Restore form values
-            currentData.forEach((setData, index) => {
-                Object.keys(setData).forEach(name => {
-                    const input = container.querySelector(`[name="${name}"]`);
-                    if (input) input.value = setData[name];
-                });
-            });
+            // Small delay to ensure DOM is fully cleared
+            setTimeout(() => {
+                try {
+                    // Regenerate all sets with NEW language
+                    for (let i = 1; i <= dataSetCount; i++) {
+                        const wrapper = document.createElement('div');
+                        wrapper.innerHTML = generateDataSet(i);
+                        const child = wrapper.firstElementChild;
+                        if (child) container.appendChild(child);
+                    }
+                    
+                    // Restore form values after DOM is ready
+                    setTimeout(() => {
+                        currentData.forEach((setData, index) => {
+                            Object.keys(setData).forEach(name => {
+                                const input = container.querySelector(`[name="${name}"]`);
+                                if (input && setData[name]) {
+                                    input.value = setData[name];
+                                }
+                            });
+                        });
+                        
+                        // Re-initialize handlers
+                        setupSelectHandlers();
+                        refreshAllSelects();
+                        try { 
+                            if (window.PD2_WAGE_B) {
+                                window.PD2_WAGE_B.bindWageBForAllSets();
+                            }
+                        } catch(e) {
+                            console.warn('⚠️ Wage calculator not available:', e.message);
+                        }
+                        
+                        console.log('✅ Data sets regenerated with language:', currentLang);
+                    }, 10);
+                } catch (innerError) {
+                    console.error('❌ Error in regeneration loop:', innerError);
+                }
+            }, 10);
             
-            // Re-initialize handlers
-            setupSelectHandlers();
-            refreshAllSelects();
-            try { window.PD2_WAGE_B && window.PD2_WAGE_B.bindWageBForAllSets(); } catch(e) {
-                console.warn('⚠️ Wage calculator not available:', e.message);
-            }
-            
-            console.log('✅ Data sets regenerated with language:', currentLang);
         } catch (error) {
             console.error('❌ Error regenerating data sets:', error);
             // Don't throw - keep existing data if regeneration fails
