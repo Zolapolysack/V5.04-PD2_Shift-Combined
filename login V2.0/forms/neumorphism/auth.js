@@ -12,9 +12,10 @@
     // Precomputed hashes for allowed credentials (hex SHA-256 of `${username}:${password}:${PEPPER}`)
     // Accounts provided by the user:
     // Zolapolysack_PD2 : ZP9965
-    // Zolapolysack_PD  : ZP1033, ZP1045, ZP1048 (single username accepts multiple passwords)
+    // Zolapolysack_PD  : ZP1029, ZP1033, ZP1045, ZP1048 (single username accepts multiple passwords)
     const STORED = [
         { user: 'Zolapolysack_PD2', hash: 'a8e81ac539d89123f49f056260c835ffa93c20c29371d334cde08a47aa7ccac1' },
+        { user: 'Zolapolysack_PD', hash: '799cd48363eaebf13fd828112e07e2bd8d6926c17f8c9621f8dc8726fb7ebd26' },
         { user: 'Zolapolysack_PD', hash: 'd724a989d62176d32de93cbae2389bf5b3a485bd7a3b3d8d69d3451a0b3b76c0' },
         { user: 'Zolapolysack_PD', hash: 'f7c5300e88dc569bc50ae1c97e9f5a4ad22e92fb849e98e99b1d16cc16a81b68' },
         { user: 'Zolapolysack_PD', hash: '3c3f7d3d72abc59362c747a1ee8d801b698634bdbe2df550ed3653353a39a864' }

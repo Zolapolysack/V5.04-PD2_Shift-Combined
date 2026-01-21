@@ -30,6 +30,7 @@ Start-Process "http://localhost:8000/forms/neumorphism/index.html"
 
 ## Accounts (for demo/testing)
 - Zolapolysack_PD2 : ZP9965
+- Zolapolysack_PD  : ZP1029
 - Zolapolysack_PD  : ZP1033
 - Zolapolysack_PD  : ZP1045
 - Zolapolysack_PD  : ZP1048
