@@ -271,6 +271,28 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* Error field styling */
+        .error-field {
+            border: 2px solid #f30000 !important;
+            background: #fef2f2 !important;
+            will-change: transform;
+        }
+        
+        .error-field.shake-animation {
+            animation: shake 0.4s ease-in-out;
+        }
+        
+        .error-field:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+            border-color: #dc2626 !important;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
         .progress-step {
             transition: all 0.3s ease;
         }
@@ -868,15 +890,15 @@
             "CL51 ตัดม้วนครั้งที่ 3", "CL52 ตัดม้วนครั้งที่ 3", "CL53 ตัดม้วนครั้งที่ 3", "CL54 ตัดม้วนครั้งที่ 3",
             "CL55 ตัดม้วนครั้งที่ 3", "CL56 ตัดม้วนครั้งที่ 3", "CL57 ตัดม้วนครั้งที่ 3", "CL58 ตัดม้วนครั้งที่ 3",
             "CL59 ตัดม้วนครั้งที่ 3", "CL60 ตัดม้วนครั้งที่ 3", "CL61 ตัดม้วนครั้งที่ 3", "CL62 ตัดม้วนครั้งที่ 3",
-            "CL63 ตัดม้วนที่ครั้ง 3", "CL64 ตัดม้วนที่ครั้ง 3", "CL65 ตัดม้วนที่ครั้ง 3", "CL66 ตัดม้วนที่ครั้ง 3",
-            "CL67 ตัดม้วนที่ครั้ง 3", "CL68 ตัดม้วนที่ครั้ง 3", "CL69 ตัดม้วนที่ครั้ง 3", "CL70 ตัดม้วนที่ครั้ง 3",
-            "CL71 ตัดม้วนที่ครั้ง 3", "CL72 ตัดม้วนที่ครั้ง 3", "CL73 ตัดม้วนที่ครั้ง 3", "CL74 ตัดม้วนที่ครั้ง 3",
-            "CL75 ตัดม้วนที่ครั้ง 3", "CL76 ตัดม้วนที่ครั้ง 3", "CL77 ตัดม้วนที่ครั้ง 3", "CL78 ตัดม้วนที่ครั้ง 3",
-            "CL79 ตัดม้วนที่ครั้ง 3", "CL80 ตัดม้วนที่ครั้ง 3", "CL81 ตัดม้วนที่ครั้ง 3", "CL82 ตัดม้วนที่ครั้ง 3",
-            "CL83 ตัดม้วนที่ครั้ง 3", "CL84 ตัดม้วนที่ครั้ง 3", "CL85 ตัดม้วนที่ครั้ง 3", "CL86 ตัดม้วนที่ครั้ง 3",
-            "CL87 ตัดม้วนที่ครั้ง 3", "CL88 ตัดม้วนที่ครั้ง 3", "CL89 ตัดม้วนที่ครั้ง 3", "CL90 ตัดม้วนที่ครั้ง 3",
-            "CL91 ตัดม้วนที่ครั้ง 3", "CL92 ตัดม้วนที่ครั้ง 3", "CL93 ตัดม้วนที่ครั้ง 3", "CL94 ตัดม้วนที่ครั้ง 3",
-            "CL95 ตัดม้วนที่ครั้ง 3", "CL34 ตัดม้วนที่ครั้ง 3", "CL35 ตัดม้วนที่ครั้ง 3", "CL36 ตัดม้วนที่ครั้ง 3"
+            "CL63 ตัดม้วนครั้งที่ 3", "CL64 ตัดม้วนครั้งที่ 3", "CL65 ตัดม้วนครั้งที่ 3", "CL66 ตัดม้วนครั้งที่ 3",
+            "CL67 ตัดม้วนครั้งที่ 3", "CL68 ตัดม้วนครั้งที่ 3", "CL69 ตัดม้วนครั้งที่ 3", "CL70 ตัดม้วนครั้งที่ 3",
+            "CL71 ตัดม้วนครั้งที่ 3", "CL72 ตัดม้วนครั้งที่ 3", "CL73 ตัดม้วนครั้งที่ 3", "CL74 ตัดม้วนครั้งที่ 3",
+            "CL75 ตัดม้วนครั้งที่ 3", "CL76 ตัดม้วนครั้งที่ 3", "CL77 ตัดม้วนครั้งที่ 3", "CL78 ตัดม้วนครั้งที่ 3",
+            "CL79 ตัดม้วนครั้งที่ 3", "CL80 ตัดม้วนครั้งที่ 3", "CL81 ตัดม้วนครั้งที่ 3", "CL82 ตัดม้วนครั้งที่ 3",
+            "CL83 ตัดม้วนครั้งที่ 3", "CL84 ตัดม้วนครั้งที่ 3", "CL85 ตัดม้วนครั้งที่ 3", "CL86 ตัดม้วนครั้งที่ 3",
+            "CL87 ตัดม้วนครั้งที่ 3", "CL88 ตัดม้วนครั้งที่ 3", "CL89 ตัดม้วนครั้งที่ 3", "CL90 ตัดม้วนครั้งที่ 3",
+            "CL91 ตัดม้วนครั้งที่ 3", "CL92 ตัดม้วนครั้งที่ 3", "CL93 ตัดม้วนครั้งที่ 3", "CL94 ตัดม้วนครั้งที่ 3",
+            "CL95 ตัดม้วนครั้งที่ 3", "CL34 ตัดม้วนครั้งที่ 3", "CL35 ตัดม้วนครั้งที่ 3", "CL36 ตัดม้วนครั้งที่ 3"
         ];
 
         // รวม combinedMachines เข้าไปใน machines โดยตรง
@@ -894,9 +916,14 @@
         ];
         const orderMap = new Map(preferredOrderBase.map((id, idx) => [parseInt(id.replace(/^CL/i, ''), 10), idx]));
         const phaseRank = (s) => {
-            const m = s.match(/ครั้ง\s*(\d+)/);
-            const p = m ? parseInt(m[1], 10) : 0;
-            return p === 2 ? 1 : p === 3 ? 2 : 0; // 0 (ปกติ), 1 (ครั้ง 2), 2 (ครั้ง 3)
+            if (!s || typeof s !== 'string') return 0;
+            // รูปแบบใหม่: "ครั้งที่ X" เท่านั้น
+            const m = s.match(/ครั้งที่\s*(\d+)/);
+            if (!m) return 0; // ปกติ
+            const phase = parseInt(m[1], 10);
+            if (phase === 2) return 1;
+            if (phase === 3) return 2;
+            return 0;
         };
         const machineComparator = (a, b) => {
             const pa = phaseRank(a);
@@ -2402,6 +2429,116 @@
             }
         });
 
+        // Field Validation Functions
+        function validateAllData(allData) {
+            const emptyFields = [];
+            const requiredFields = ['date', 'machine', 'employeeA', 'fabricSize', 'meterStartA', 'meterEndA'];
+            
+            allData.forEach((dataSet, index) => {
+                requiredFields.forEach(field => {
+                    const value = dataSet[field];
+                    // ตรวจสอบว่าค่าว่าง หรือเป็น 'ADD_NEW' (ค่าที่เลือกเพื่อเปิด modal)
+                    if (!value || value.toString().trim() === '' || value === 'ADD_NEW') {
+                        emptyFields.push({
+                            setIndex: index,
+                            field: field,
+                            label: getFieldLabel(field)
+                        });
+                    }
+                });
+            });
+            
+            if (emptyFields.length > 0) {
+                const fieldLabels = [...new Set(emptyFields.map(f => f.label))].join(', ');
+                return {
+                    isValid: false,
+                    message: `กรุณากรอกข้อมูลให้ครบถ้วน: ${fieldLabels}`,
+                    emptyFields: emptyFields
+                };
+            }
+            
+            return { isValid: true, message: '', emptyFields: [] };
+        }
+        
+        function getFieldLabel(field) {
+            const labels = {
+                'date': 'วันที่',
+                'machine': 'เครื่องจักร',
+                'employeeA': 'พนักงาน A',
+                'fabricSize': 'ขนาดผ้า',
+                'meterStartA': 'เมตรเริ่ม A',
+                'meterEndA': 'เมตรจบ A'
+            };
+            return labels[field] || field;
+        }
+        
+        function highlightEmptyFields(emptyFields) {
+            // Remove all existing error highlights and animations first
+            document.querySelectorAll('.error-field').forEach(el => {
+                el.classList.remove('error-field', 'shake-animation');
+            });
+            
+            if (emptyFields.length === 0) return;
+            
+            let firstErrorField = null;
+            
+            // Highlight empty fields
+            emptyFields.forEach(({ setIndex, field }) => {
+                const dataSetElement = document.querySelectorAll('.data-set')[setIndex];
+                if (!dataSetElement) return;
+                
+                const setNumber = setIndex + 1;
+                let fieldElement = null;
+                
+                // Find field by name attribute
+                if (field === 'date') {
+                    fieldElement = dataSetElement.querySelector(`[name="date_${setNumber}"]`);
+                } else if (field === 'machine') {
+                    // ให้ความสำคัญกับ manual input ถ้ามีค่า, ไม่เช่นนั้นใช้ select
+                    const selectEl = dataSetElement.querySelector(`[name="machine_${setNumber}"]`);
+                    const manualEl = dataSetElement.querySelector(`[name="machineManual_${setNumber}"]`);
+                    const manualVal = manualEl?.value?.trim() || '';
+                    fieldElement = manualVal ? manualEl : selectEl;
+                } else if (field === 'employeeA') {
+                    const selectEl = dataSetElement.querySelector(`[name="employeeA_${setNumber}"]`);
+                    const manualEl = dataSetElement.querySelector(`[name="employeeAManual_${setNumber}"]`);
+                    const manualVal = manualEl?.value?.trim() || '';
+                    fieldElement = manualVal ? manualEl : selectEl;
+                } else if (field === 'fabricSize') {
+                    const selectEl = dataSetElement.querySelector(`[name="fabricSize_${setNumber}"]`);
+                    const manualEl = dataSetElement.querySelector(`[name="fabricSizeManual_${setNumber}"]`);
+                    const manualVal = manualEl?.value?.trim() || '';
+                    fieldElement = manualVal ? manualEl : selectEl;
+                } else if (field === 'meterStartA') {
+                    fieldElement = dataSetElement.querySelector(`[name="meterStartA_${setNumber}"]`);
+                } else if (field === 'meterEndA') {
+                    fieldElement = dataSetElement.querySelector(`[name="meterEndA_${setNumber}"]`);
+                }
+                
+                if (fieldElement) {
+                    fieldElement.classList.add('error-field');
+                    if (!firstErrorField) {
+                        firstErrorField = fieldElement;
+                    }
+                }
+            });
+            
+            // Trigger animation after a small delay to ensure CSS is applied
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.error-field').forEach(el => {
+                    el.classList.add('shake-animation');
+                });
+            });
+            
+            // Scroll to first error and focus
+            if (firstErrorField) {
+                firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => {
+                    firstErrorField.focus();
+                }, 500);
+            }
+        }
+
         // Data Submission Functions
         async function submitData() {
             console.log('🚀 เริ่มต้นการส่งข้อมูล');
@@ -2409,6 +2546,13 @@
             const allData = collectAllData();
             if (!allData || allData.length === 0) {
                 showNotification('ไม่พบข้อมูลที่ต้องการส่งในระบบ', 'error');
+                return;
+            }
+            
+            // Validate all required fields
+            const validation = validateAllData(allData);
+            if (!validation.isValid) {
+                highlightEmptyFields(validation.emptyFields);
                 return;
             }
             
@@ -2564,23 +2708,29 @@
             
             dataSets.forEach((dataSet, index) => {
                 const setNumber = (dataSet.getAttribute('data-set') || (index + 1)).toString();
-        // เลือกค่าจากเครื่องทอ: ให้ค่าที่กรอกเองมาก่อน
-        const machSelVal = dataSet.querySelector(`[name="machine_${setNumber}"]`)?.value || '';
-        const machManualVal = dataSet.querySelector(`[name="machineManual_${setNumber}"]`)?.value || '';
-        const machineValue = machManualVal ? machManualVal.trim() : machSelVal;
-                // ให้ความสำคัญกับค่าที่กรอกเอง หากมี ให้ใช้แทน select
+                
+                // Machine: ใช้ manual input ถ้า trim แล้วมีค่า, ไม่เช่นนั้นใช้ select
+                const machSelVal = dataSet.querySelector(`[name="machine_${setNumber}"]`)?.value || '';
+                const machManualVal = dataSet.querySelector(`[name="machineManual_${setNumber}"]`)?.value || '';
+                const machManualTrimmed = machManualVal.trim();
+                const machineValue = machManualTrimmed ? machManualTrimmed : machSelVal;
+                
+                // Employee A: ใช้ manual input ถ้า trim แล้วมีค่า, ไม่เช่นนั้นใช้ select
                 const empSelVal = dataSet.querySelector(`[name="employeeA_${setNumber}"]`)?.value || '';
                 const empManualVal = dataSet.querySelector(`[name="employeeAManual_${setNumber}"]`)?.value || '';
-                // ปกติจะเก็บเป็น id; หากผู้ใช้กรอกเองแบบ "ID - ชื่อ" ให้แตกเอา id ด้านหน้า
+                const empManualTrimmed = empManualVal.trim();
                 let employeeAValue = empSelVal;
-                if (empManualVal) {
-                    const idFromManual = empManualVal.split(' - ')[0].trim();
-                    employeeAValue = idFromManual || empManualVal.trim();
+                if (empManualTrimmed) {
+                    // ถ้ากรอกเองแบบ "ID - ชื่อ" ให้แตก ID ออกมา
+                    const idFromManual = empManualTrimmed.split(' - ')[0].trim();
+                    employeeAValue = idFromManual || empManualTrimmed;
                 }
 
+                // Fabric Size: ใช้ manual input ถ้า trim แล้วมีค่า, ไม่เช่นนั้นใช้ select
                 const fabSelVal = dataSet.querySelector(`[name="fabricSize_${setNumber}"]`)?.value || '';
                 const fabManualVal = dataSet.querySelector(`[name="fabricSizeManual_${setNumber}"]`)?.value || '';
-                const fabricSizeValue = fabManualVal ? fabManualVal.trim() : fabSelVal;
+                const fabManualTrimmed = fabManualVal.trim();
+                const fabricSizeValue = fabManualTrimmed ? fabManualTrimmed : fabSelVal;
                 const setData = {
                     setNumber: Number(setNumber),
                     date: dataSet.querySelector(`[name="date_${setNumber}"]`)?.value || '',
