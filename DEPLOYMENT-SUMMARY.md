@@ -98,14 +98,14 @@ speedA             → ความเร็วรอบ กะ B
 
 **Shift A:**
 ```
-Production URL: https://script.google.com/macros/s/AKfycbyR-lhvK05GP1c4yRPuVwYPjEhElGCNGsumidY3pIY-b2qSN5EFLckWpL6hWz5MABA9/exec
+Production URL: https://script.google.com/macros/s/AKfycbzyHeKF4D1A5OnyAdmogDIBiTkkzmyaMjHdj29XMnwcLYLeC39Eb8YPfNc2Zy4yHp2V/exec
 Sheet ID: 1K9e_VNW34yF_nVFCXW3v6W8v7FAt33Gr9xnuwCHBadc
 Folder ID: 1O07zs3-Vm7W42DvkHg1RU6BKcw60zljV
 ```
 
 **Shift B:**
 ```
-Production URL: https://script.google.com/macros/s/AKfycbyMPKpqHRkrBggiTcnUgJzjQMYrlo53m5xnPz03jqo51vFny53BDw0S18BHdDqU4mms/exec
+Production URL: https://script.google.com/macros/s/AKfycbwh2viO76_yCWxKtCKW1svuFZX-x-QWKfpIgFkLKuXmsIp0RKVSXTvWfio-zlp0OB0AEA/exec
 Sheet ID: 1ZhDdKmzZSK0koExN2u_JsiF_SLAOanYyGtuewNAkFYU
 Folder ID: 1vGSCN4Qf8XZNewfhpscW4BNZaHV8lvpe
 ```

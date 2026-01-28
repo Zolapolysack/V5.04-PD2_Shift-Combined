@@ -1,10 +1,19 @@
 /**
  * ระบบจัดการข้อมูลรายงานแผนกผลิต 2 - กะ A
- * Version: 2.2 (Complete & Fixed)
- * Updated: 2026-01-22
+ * Version: 2.3.1 (Strict Mapping)
+ * Updated: 2026-01-28
  *
  * @description Script นี้ทำหน้าที่เป็น Web App สำหรับรับข้อมูลจากฟอร์ม
  * และบันทึกลงใน Google Sheets พร้อมทั้งสร้างไฟล์สำรองข้อมูล (Backup)
+ * 
+ * Changelog v2.3.1:
+ * - ปรับปรุงการ Map ข้อมูลให้ Strict มากขึ้น (กำหนดค่าว่างสำหรับกะ B อย่างชัดเจน)
+ * - ทำให้ Logic ตรงกับกะ B ที่ทำงานได้ปกติ
+ * 
+ * Changelog v2.3:
+ * - แก้ไขปัญหาการบันทึก timestamp ที่แสดงเป็น 1899-12-31, 1900-01-01 ฯลฯ
+ * - เปลี่ยนจาก timestamp.toLocaleString('th-TH') เป็น Utilities.formatDate()
+ * - แก้ไขปัญหาข้อมูลเลื่อนคอลัมน์ทางขวา
  */
 
 // ===================== CONFIGURATION =====================
@@ -22,7 +31,7 @@ const CONFIG = {
   MAX_RETRIES: 3,
   BACKUP_ENABLED: true,
   LOG_ENABLED: true,
-  VERSION: '2.2',
+  VERSION: '2.3',
   SHIFT: 'A'
 };
 
@@ -91,7 +100,7 @@ class SheetsManager {
         }
         Logger.success('Headers created and formatted.');
       } else {
-        // ตรวจสอบและซ่อมแซม headers ถ้ามีข้อมูลอยู่แล้ว
+        // ตรวจสอบและซ่อมแซม headers ที่มีอยู่แล้ว
         this.validateAndRepairHeaders();
       }
     } catch (err) {
@@ -101,59 +110,81 @@ class SheetsManager {
   }
 
   /**
-   * ตรวจสอบและซ่อมแซม headers และโครงสร้าง
-   * - ซ่อมแซม headers ที่ถูกแก้ไข
-   * - เพิ่มคอลัมน์ที่หายไป
-   * - จัดฟอร์แมต headers ใหม่
+   * ตรวจสอบและซ่อมแซม headers ที่หายไปหรือไม่ถูกต้อง
    */
   validateAndRepairHeaders() {
     try {
-      const lastCol = this.worksheet.getLastColumn();
-      const expectedCols = CONFIG.HEADERS.length;
-      
-      // กรณีคอลัมน์น้อยกว่าที่ควรเป็น (มีคนลบคอลัมน์)
-      if (lastCol < expectedCols) {
-        Logger.warn(`Columns missing. Expected ${expectedCols}, found ${lastCol}. Repairing...`);
+      if (this.worksheet.getLastRow() === 0) {
+        Logger.info('Sheet is empty, skipping header validation.');
+        return;
       }
+
+      const headerRow = 1;
+      const existingHeaders = this.worksheet.getRange(headerRow, 1, 1, this.worksheet.getLastColumn()).getValues()[0];
+      const existingHeadersStr = existingHeaders.map(h => String(h || '').trim());
       
-      // อ่าน headers ปัจจุบัน (ใช้ range ตามจำนวนที่ต้องการเสมอ)
-      const headerRange = this.worksheet.getRange(1, 1, 1, expectedCols);
-      const currentHeaders = headerRange.getValues()[0];
-      
-      // ตรวจสอบว่า headers ตรงหรือไม่
+      Logger.info('Validating headers...', { 
+        expected: CONFIG.HEADERS.length, 
+        found: existingHeadersStr.length 
+      });
+
       let needsRepair = false;
-      for (let i = 0; i < expectedCols; i++) {
-        if (currentHeaders[i] !== CONFIG.HEADERS[i]) {
+      const missingHeaders = [];
+      const extraHeaders = [];
+
+      // ตรวจสอบว่า headers ตรงกันหรือไม่
+      if (existingHeadersStr.length !== CONFIG.HEADERS.length) {
+        needsRepair = true;
+        Logger.warn('Header count mismatch', { 
+          expected: CONFIG.HEADERS.length, 
+          found: existingHeadersStr.length 
+        });
+      }
+
+      // ตรวจสอบแต่ละคอลัมน์
+      for (let i = 0; i < CONFIG.HEADERS.length; i++) {
+        if (existingHeadersStr[i] !== CONFIG.HEADERS[i]) {
           needsRepair = true;
-          Logger.warn(`Header mismatch at column ${i + 1}: "${currentHeaders[i]}" should be "${CONFIG.HEADERS[i]}"`);
+          if (!existingHeadersStr[i] || existingHeadersStr[i] === '') {
+            missingHeaders.push({ index: i, name: CONFIG.HEADERS[i] });
+          }
         }
       }
-      
-      // ซ่อมแซมถ้าจำเป็น
-      if (needsRepair || lastCol < expectedCols) {
-        Logger.warn('Headers corrupted or incomplete. Repairing...');
+
+      // ตรวจสอบคอลัมน์เกิน
+      if (existingHeadersStr.length > CONFIG.HEADERS.length) {
+        for (let i = CONFIG.HEADERS.length; i < existingHeadersStr.length; i++) {
+          if (existingHeadersStr[i] && existingHeadersStr[i] !== '') {
+            extraHeaders.push({ index: i, name: existingHeadersStr[i] });
+          }
+        }
+      }
+
+      if (needsRepair) {
+        Logger.warn('Headers need repair', { 
+          missing: missingHeaders.length,
+          extra: extraHeaders.length 
+        });
         
-        // เขียนทับ headers ที่ถูกต้อง
-        headerRange.setValues([CONFIG.HEADERS]);
+        // ซ่อมแซม headers
+        const range = this.worksheet.getRange(headerRow, 1, 1, CONFIG.HEADERS.length);
+        range.setValues([CONFIG.HEADERS]);
+        range.setFontWeight('bold').setHorizontalAlignment('center');
         
-        // จัดฟอร์แมต
-        headerRange.setFontWeight('bold')
-                   .setHorizontalAlignment('center')
-                   .setVerticalAlignment('middle')
-                   .setBackground('#f3f3f3');
-        
-        // ล็อคแถวแรก
-        this.worksheet.setFrozenRows(1);
-        
-        // ปรับขนาดคอลัมน์
-        for (let i = 1; i <= expectedCols; i++) {
-          this.worksheet.autoResizeColumn(i);
+        // ตรวจสอบว่า frozen rows ถูกต้องหรือไม่
+        if (this.worksheet.getFrozenRows() !== 1) {
+          this.worksheet.setFrozenRows(1);
         }
         
-        Logger.success('Headers repaired successfully.');
+        Logger.success('Headers repaired successfully', { 
+          fixed: CONFIG.HEADERS.length 
+        });
+      } else {
+        Logger.info('Headers are valid.');
       }
     } catch (err) {
       Logger.error('Header validation failed', err.toString());
+      // ไม่ throw error เพื่อไม่ให้ระบบหยุดทำงาน
     }
   }
   
@@ -168,11 +199,16 @@ class SheetsManager {
       throw new Error('No data provided to save.');
     }
     try {
-      // Validate headers before saving
+      // ตรวจสอบและซ่อมแซม headers ก่อนบันทึกข้อมูล
       this.validateAndRepairHeaders();
       
       const timestamp = new Date();
-      const timestampStr = Utilities.formatDate(timestamp, 'Asia/Bangkok', 'dd/MM/yyyy HH:mm:ss');
+      // แปลงเป็น พ.ศ. (พุทธศักราช) รูปแบบ: 24/1/2569 16:52:18
+      const buddhistYear = timestamp.getFullYear() + 543;
+      const day = timestamp.getDate();
+      const month = timestamp.getMonth() + 1;
+      const time = Utilities.formatDate(timestamp, 'Asia/Bangkok', 'HH:mm:ss');
+      const timestampStr = `${day}/${month}/${buddhistYear} ${time}`;
       
       const dataMap = (item, index) => ({
         'เวลาบันทึก': timestampStr,
@@ -180,22 +216,22 @@ class SheetsManager {
         'วันที่': item.date || '',
         'เครื่องทอ NO': item.machine || '',
         'พนักงานทอ กะ A': item.employeeA || '',
-        'พนักงานทอ กะ B': item.employeeB || '',
+        'พนักงานทอ กะ B': '', // ปล่อยว่าง
         'ขนาดหน้าผ้า': item.fabricSize || '',
         'Lot.No': item.lotNo || '',
         'เลขที่ใบสั่งผลิต': item.orderNo || '',
         'ยอดทอ กะ A': this._parseNumber(item.productionA),
-        'ยอดทอ กะ B': this._parseNumber(item.productionB),
+        'ยอดทอ กะ B': '', // ปล่อยว่าง
         'ความเร็วรอบ กะ A': this._parseNumber(item.speedA),
-        'ความเร็วรอบ กะ B': this._parseNumber(item.speedB),
+        'ความเร็วรอบ กะ B': '', // ปล่อยว่าง
         'ประสิทธิภาพ กะ A': this._parseNumber(item.efficiencyA),
-        'ประสิทธิภาพ กะ B': this._parseNumber(item.efficiencyB),
+        'ประสิทธิภาพ กะ B': '', // ปล่อยว่าง
         'มิเตอร์เริ่มงาน กะ A': this._parseNumber(item.meterStartA),
         'มิเตอร์เลิกงาน กะ A': this._parseNumber(item.meterEndA),
-        'มิเตอร์เริ่มงาน กะ B': this._parseNumber(item.meterStartB),
-        'มิเตอร์เลิกงาน กะ B': this._parseNumber(item.meterEndB),
+        'มิเตอร์เริ่มงาน กะ B': '', // ปล่อยว่าง
+        'มิเตอร์เลิกงาน กะ B': '', // ปล่อยว่าง
         'ความยาวตัดม้วน กะ A': this._parseNumber(item.lengthA),
-        'ความยาวตัดม้วน กะ B': this._parseNumber(item.lengthB)
+        'ความยาวตัดม้วน กะ B': '' // ปล่อยว่าง
       });
       
       const rows = data.map((item, index) => {

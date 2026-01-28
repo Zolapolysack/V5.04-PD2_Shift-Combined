@@ -1,34 +1,36 @@
 # Apps Script URLs Configuration
 
-อัพเดทล่าสุด: 22 มกราคม 2026
+อัพเดทล่าสุด: 28 มกราคม 2026
 
 ## 📋 PD2 Shift System
 
 ### ✅ กะ A (PD2_Shift-A_V4.0)
 **Apps Script Endpoint:**
 ```
-https://script.google.com/macros/s/AKfycbyR-lhvK05GP1c4yRPuVwYPjEhElGCNGsumidY3pIY-b2qSN5EFLckWpL6hWz5MABA9/exec
+https://script.google.com/macros/s/AKfycbzyHeKF4D1A5OnyAdmogDIBiTkkzmyaMjHdj29XMnwcLYLeC39Eb8YPfNc2Zy4yHp2V/exec
 ```
 
 **Sheet Configuration:**
 - **Google Sheet ID:** `1K9e_VNW34yF_nVFCXW3v6W8v7FAt33Gr9xnuwCHBadc`
 - **Folder ID:** `1O07zs3-Vm7W42DvkHg1RU6BKcw60zljV`
 - **Location:** `ปรับ script PD2_Shift-A_V4.0/index.html` (line 1032)
-- **Last Updated:** 2026-01-22 (NEW DEPLOYMENT) ✅ ACTIVE
+- **Version:** v2.3 (Timestamp Fixed)
+- **Last Updated:** 2026-01-28 ✅ ACTIVE
 
 ---
 
 ### ✅ กะ B (PD2_Shift-B_V4.0)
 **Apps Script Endpoint:**
 ```
-https://script.google.com/macros/s/AKfycbyMPKpqHRkrBggiTcnUgJzjQMYrlo53m5xnPz03jqo51vFny53BDw0S18BHdDqU4mms/exec
+https://script.google.com/macros/s/AKfycbwh2viO76_yCWxKtCKW1svuFZX-x-QWKfpIgFkLKuXmsIp0RKVSXTvWfio-zlp0OB0AEA/exec
 ```
 
 **Sheet Configuration:**
 - **Google Sheet ID:** `1ZhDdKmzZSK0koExN2u_JsiF_SLAOanYyGtuewNAkFYU`
 - **Folder ID:** `1vGSCN4Qf8XZNewfhpscW4BNZaHV8lvpe`
 - **Location:** `ปรับ script PD2_Shift-B_V4.0/index.html` (line 1007)
-- **Last Updated:** 2026-01-22 (NEW DEPLOYMENT) ✅ ACTIVE
+- **Version:** v2.3 (Timestamp Fixed)
+- **Last Updated:** 2026-01-28 ✅ ACTIVE
 
 ---
 
