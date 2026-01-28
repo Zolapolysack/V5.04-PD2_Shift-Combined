@@ -92,10 +92,70 @@ class SheetsManager {
           this.worksheet.autoResizeColumn(i);
         }
         Logger.success('Headers created and formatted.');
+      } else {
+        // ตรวจสอบและซ่อมแซม headers ถ้ามีข้อมูลอยู่แล้ว
+        this.validateAndRepairHeaders();
       }
     } catch (err) {
       Logger.error('Header setup failed', err.toString());
       throw err;
+    }
+  }
+
+  /**
+   * ตรวจสอบและซ่อมแซม headers และโครงสร้าง
+   * - ซ่อมแซม headers ที่ถูกแก้ไข
+   * - เพิ่มคอลัมน์ที่หายไป
+   * - จัดฟอร์แมต headers ใหม่
+   */
+  validateAndRepairHeaders() {
+    try {
+      const lastCol = this.worksheet.getLastColumn();
+      const expectedCols = CONFIG.HEADERS.length;
+      
+      // กรณีคอลัมน์น้อยกว่าที่ควรเป็น (มีคนลบคอลัมน์)
+      if (lastCol < expectedCols) {
+        Logger.warn(`Columns missing. Expected ${expectedCols}, found ${lastCol}. Repairing...`);
+      }
+      
+      // อ่าน headers ปัจจุบัน (ใช้ range ตามจำนวนที่ต้องการเสมอ)
+      const headerRange = this.worksheet.getRange(1, 1, 1, expectedCols);
+      const currentHeaders = headerRange.getValues()[0];
+      
+      // ตรวจสอบว่า headers ตรงหรือไม่
+      let needsRepair = false;
+      for (let i = 0; i < expectedCols; i++) {
+        if (currentHeaders[i] !== CONFIG.HEADERS[i]) {
+          needsRepair = true;
+          Logger.warn(`Header mismatch at column ${i + 1}: "${currentHeaders[i]}" should be "${CONFIG.HEADERS[i]}"`);
+        }
+      }
+      
+      // ซ่อมแซมถ้าจำเป็น
+      if (needsRepair || lastCol < expectedCols) {
+        Logger.warn('Headers corrupted or incomplete. Repairing...');
+        
+        // เขียนทับ headers ที่ถูกต้อง
+        headerRange.setValues([CONFIG.HEADERS]);
+        
+        // จัดฟอร์แมต
+        headerRange.setFontWeight('bold')
+                   .setHorizontalAlignment('center')
+                   .setVerticalAlignment('middle')
+                   .setBackground('#f3f3f3');
+        
+        // ล็อคแถวแรก
+        this.worksheet.setFrozenRows(1);
+        
+        // ปรับขนาดคอลัมน์
+        for (let i = 1; i <= expectedCols; i++) {
+          this.worksheet.autoResizeColumn(i);
+        }
+        
+        Logger.success('Headers repaired successfully.');
+      }
+    } catch (err) {
+      Logger.error('Header validation failed', err.toString());
     }
   }
   
@@ -125,10 +185,14 @@ class SheetsManager {
       throw new Error('No data provided to save.');
     }
     try {
+      // Validate headers before saving
+      this.validateAndRepairHeaders();
+      
       const timestamp = new Date();
+      const timestampStr = Utilities.formatDate(timestamp, 'Asia/Bangkok', 'dd/MM/yyyy HH:mm:ss');
       
       const dataMap = (item, index) => ({
-        'เวลาบันทึก': timestamp.toLocaleString('th-TH'),
+        'เวลาบันทึก': timestampStr,
         'ลำดับชุดข้อมูลที่': item.setNumber || (index + 1),
         'วันที่': item.date || '',
         'เครื่องทอ NO': item.machine || '',

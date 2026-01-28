@@ -7,7 +7,7 @@
 ### ✅ กะ A (PD2_Shift-A_V4.0)
 **Apps Script Endpoint:**
 ```
-https://script.google.com/macros/s/AKfycbyZKs35suAnfs7GUj33UpciYRzX4WW3PY56NfUzHtsc0chw4h-BP8B9P9WOfF8Fwsix/exec
+https://script.google.com/macros/s/AKfycbyR-lhvK05GP1c4yRPuVwYPjEhElGCNGsumidY3pIY-b2qSN5EFLckWpL6hWz5MABA9/exec
 ```
 
 **Sheet Configuration:**
@@ -21,7 +21,7 @@ https://script.google.com/macros/s/AKfycbyZKs35suAnfs7GUj33UpciYRzX4WW3PY56NfUzH
 ### ✅ กะ B (PD2_Shift-B_V4.0)
 **Apps Script Endpoint:**
 ```
-https://script.google.com/macros/s/AKfycbwhvA9CAy14T0lOcQgQEtGduhhE4ywPdJ6LHw353utTLPL_mmLTXmjpjL9E1-wEU6pKTQ/exec
+https://script.google.com/macros/s/AKfycbyMPKpqHRkrBggiTcnUgJzjQMYrlo53m5xnPz03jqo51vFny53BDw0S18BHdDqU4mms/exec
 ```
 
 **Sheet Configuration:**
